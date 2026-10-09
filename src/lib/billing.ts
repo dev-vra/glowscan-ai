@@ -8,13 +8,18 @@ export type Plan = "monthly" | "yearly";
 const TRIAL_DAYS = 3;
 
 let client: Stripe | undefined;
+function required(name: string, value: string | undefined) {
+  if (!value) throw new Error(`${name} não configurada`);
+  return value;
+}
+
 export function stripe() {
-  client ??= new Stripe(env().STRIPE_SECRET_KEY);
+  client ??= new Stripe(required("STRIPE_SECRET_KEY", env().STRIPE_SECRET_KEY));
   return client;
 }
 
 function priceFor(plan: Plan) {
-  return plan === "yearly" ? env().STRIPE_PRICE_YEARLY : env().STRIPE_PRICE_MONTHLY;
+  return plan === "yearly" ? required("STRIPE_PRICE_YEARLY", env().STRIPE_PRICE_YEARLY) : required("STRIPE_PRICE_MONTHLY", env().STRIPE_PRICE_MONTHLY);
 }
 
 async function ensureCustomer(userId: string, email: string) {
@@ -86,7 +91,7 @@ async function syncSubscription(subscription: Stripe.Subscription) {
 const HANDLED = new Set(["checkout.session.completed", "customer.subscription.created", "customer.subscription.updated", "customer.subscription.deleted", "invoice.payment_failed"]);
 
 export async function handleStripeWebhook(rawBody: string, signature: string) {
-  const event = stripe().webhooks.constructEvent(rawBody, signature, env().STRIPE_WEBHOOK_SECRET);
+  const event = stripe().webhooks.constructEvent(rawBody, signature, required("STRIPE_WEBHOOK_SECRET", env().STRIPE_WEBHOOK_SECRET));
   if (!HANDLED.has(event.type)) return;
 
   // Idempotência: Stripe reenvia eventos; o id vira PK e a segunda inserção falha.

@@ -1,6 +1,7 @@
 import "server-only";
 import { analyzeFaceImage, FACE_PROMPT_VERSION } from "@/lib/ai/analyze-face";
 import { db } from "@/lib/db";
+import { env } from "@/lib/env";
 import { deleteAuthUser, deleteUserPhotos, signedPhotoUrl, supabaseAuth, uploadPhoto } from "@/lib/supabase";
 import type { FaceScan as FaceScanRow, ScanMetric as ScanMetricRow } from "@/generated/prisma/client";
 import type { FaceScan, MetricResult, SkinMetric, User } from "./types";
@@ -69,6 +70,8 @@ export async function revokeFacialConsent(userId: string) {
 }
 
 export async function hasActiveSubscription(userId: string) {
+  // Atalho só para desenvolvimento local sem Stripe; ignorado em produção.
+  if (env().BILLING_BYPASS && process.env.NODE_ENV !== "production") return true;
   const sub = await db().subscription.findUnique({ where: { userId } });
   return sub !== null && ACTIVE_SUBSCRIPTION.includes(sub.status);
 }

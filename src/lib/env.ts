@@ -8,10 +8,11 @@ const schema = z.object({
   DATABASE_URL: z.string().min(1),
   NEXT_PUBLIC_SITE_URL: z.url(),
   AI_VISION_MODEL: z.string().default("anthropic/claude-sonnet-5.5"),
-  STRIPE_SECRET_KEY: z.string().min(1),
-  STRIPE_WEBHOOK_SECRET: z.string().min(1),
-  STRIPE_PRICE_MONTHLY: z.string().min(1),
-  STRIPE_PRICE_YEARLY: z.string().min(1),
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().optional(),
+  STRIPE_PRICE_MONTHLY: z.string().optional(),
+  STRIPE_PRICE_YEARLY: z.string().optional(),
+  BILLING_BYPASS: z.stringbool().default(false),
 });
 
 let cached: z.infer<typeof schema> | undefined;
