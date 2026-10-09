@@ -10,7 +10,7 @@ export default function SignInPage() {
         <p className="text-sm text-muted">Sem senha: enviamos um link de acesso para o seu e-mail.</p>
       </div>
       <SignInForm />
-      <p className="text-xs text-muted">Modo demonstração: o acesso é imediato, sem e-mail.</p>
+      <p className="text-xs text-muted">Ao continuar, você concorda com os Termos de Uso e a Política de Privacidade.</p>
     </main>
   );
 }

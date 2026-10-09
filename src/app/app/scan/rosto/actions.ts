@@ -13,6 +13,8 @@ export async function submitFaceScanAction(imageDataUrl: string): Promise<ScanSt
   } catch (error) {
     const code = error instanceof Error ? error.message : "";
     if (code === "CONSENT_REQUIRED") redirect("/app/consentimento");
+    if (code === "SUBSCRIPTION_REQUIRED") redirect("/assinar");
+    if (code === "RATE_LIMITED") return { error: "Você atingiu o limite de análises de hoje. Volte amanhã." };
     return { error: "Não conseguimos analisar esta foto. Tente de novo com mais luz." };
   }
   redirect(`/app/scan/${scanId}`);

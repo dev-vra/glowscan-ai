@@ -1,15 +1,22 @@
 import "server-only";
-import { cookies } from "next/headers";
-import { fakeAnalyze } from "./fake-analysis";
-import { store } from "./fake-store";
-import { METRIC_LABELS, type FaceScan, type User } from "./types";
+import { analyzeFaceImage, FACE_PROMPT_VERSION } from "@/lib/ai/analyze-face";
+import { db } from "@/lib/db";
+import { deleteAuthUser, deleteUserPhotos, signedPhotoUrl, supabaseAuth, uploadPhoto } from "@/lib/supabase";
+import type { FaceScan as FaceScanRow, ScanMetric as ScanMetricRow } from "@/generated/prisma/client";
+import type { FaceScan, MetricResult, SkinMetric, User } from "./types";
 
-const SESSION_COOKIE = "gs_uid";
-const MAX_IMAGE_CHARS = 4_000_000;
+const MAX_IMAGE_BYTES = 3_500_000;
+const DAILY_SCAN_LIMIT = 10;
+const DAY_MS = 86_400_000;
+const ACTIVE_SUBSCRIPTION: readonly string[] = ["trialing", "active"];
 
 export async function getCurrentUser(): Promise<User | null> {
-  const id = (await cookies()).get(SESSION_COOKIE)?.value;
-  return id ? (store.users.get(id) ?? null) : null;
+  const supabase = await supabaseAuth();
+  const { data } = await supabase.auth.getUser();
+  if (!data.user?.email) return null;
+  const { id, email } = data.user;
+  await db().user.upsert({ where: { id }, create: { id, email }, update: {} });
+  return { id, email };
 }
 
 export async function requireUser(): Promise<User> {
@@ -18,64 +25,131 @@ export async function requireUser(): Promise<User> {
   return user;
 }
 
-export async function signInWithEmail(email: string): Promise<User> {
-  const normalized = email.trim().toLowerCase();
-  const existing = [...store.users.values()].find((u) => u.email === normalized);
-  const user = existing ?? { id: crypto.randomUUID(), email: normalized };
-  store.users.set(user.id, user);
-  (await cookies()).set(SESSION_COOKIE, user.id, { httpOnly: true, sameSite: "lax", path: "/" });
-  return user;
+export async function sendMagicLink(email: string, redirectTo: string) {
+  const supabase = await supabaseAuth();
+  const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: redirectTo } });
+  if (error) throw new Error(`MAGIC_LINK_FAILED: ${error.message}`);
+}
+
+export async function startGoogleSignIn(redirectTo: string) {
+  const supabase = await supabaseAuth();
+  const { data, error } = await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo } });
+  if (error || !data.url) throw new Error("OAUTH_FAILED");
+  return data.url;
+}
+
+export async function exchangeAuthCode(code: string) {
+  const supabase = await supabaseAuth();
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
+  return !error;
 }
 
 export async function signOut() {
-  (await cookies()).delete(SESSION_COOKIE);
+  const supabase = await supabaseAuth();
+  await supabase.auth.signOut({ scope: "global" });
+}
+
+export async function deleteAccount(userId: string) {
+  await deleteUserPhotos(userId);
+  await deleteAuthUser(userId); // FK com cascade apaga todas as linhas do usuário
 }
 
 export async function hasFacialConsent(userId: string) {
-  return store.consents.has(userId);
+  const consent = await db().consent.findFirst({ where: { userId, kind: "facial_photo", revokedAt: null } });
+  return consent !== null;
 }
 
 export async function grantFacialConsent(userId: string) {
-  store.consents.set(userId, new Date());
+  if (await hasFacialConsent(userId)) return;
+  await db().consent.create({ data: { userId, kind: "facial_photo" } });
 }
 
 export async function revokeFacialConsent(userId: string) {
-  store.consents.delete(userId);
+  await db().consent.updateMany({ where: { userId, kind: "facial_photo", revokedAt: null }, data: { revokedAt: new Date() } });
+}
+
+export async function hasActiveSubscription(userId: string) {
+  const sub = await db().subscription.findUnique({ where: { userId } });
+  return sub !== null && ACTIVE_SUBSCRIPTION.includes(sub.status);
+}
+
+function decodeJpegDataUrl(dataUrl: string) {
+  const match = /^data:image\/jpeg;base64,(.+)$/.exec(dataUrl);
+  if (!match) throw new Error("INVALID_IMAGE");
+  const bytes = Buffer.from(match[1], "base64");
+  if (bytes.length > MAX_IMAGE_BYTES) throw new Error("INVALID_IMAGE");
+  return bytes;
 }
 
 export async function createAndAnalyzeFaceScan(userId: string, imageDataUrl: string): Promise<FaceScan> {
   if (!(await hasFacialConsent(userId))) throw new Error("CONSENT_REQUIRED");
-  if (!imageDataUrl.startsWith("data:image/") || imageDataUrl.length > MAX_IMAGE_CHARS) throw new Error("INVALID_IMAGE");
+  if (!(await hasActiveSubscription(userId))) throw new Error("SUBSCRIPTION_REQUIRED");
+  const recent = await db().faceScan.count({ where: { userId, takenAt: { gte: new Date(Date.now() - DAY_MS) } } });
+  if (recent >= DAILY_SCAN_LIMIT) throw new Error("RATE_LIMITED");
 
-  const analysis = fakeAnalyze(imageDataUrl.slice(-2000));
-  const scan: FaceScan = {
-    id: crypto.randomUUID(),
-    userId,
-    imageUrl: imageDataUrl,
-    takenAt: new Date(),
-    status: "done",
-    rejectReason: null,
-    lightingQuality: analysis.lightingQuality,
-    makeupDetected: false,
-    overallScore: analysis.overallScore,
-    summary: `Seu ponto de maior atenção hoje é ${METRIC_LABELS[analysis.weakestMetric].toLowerCase()}. Mantenha a consistência da rotina e refaça o scan em 7 dias com a mesma luz.`,
-    metrics: analysis.metrics,
-  };
-  store.scans.set(scan.id, scan);
+  const bytes = decodeJpegDataUrl(imageDataUrl);
+  const scanId = crypto.randomUUID();
+  const imagePath = `${userId}/face-${scanId}.jpg`;
+  await uploadPhoto(imagePath, bytes, "image/jpeg");
+  await db().faceScan.create({ data: { id: scanId, userId, imagePath, status: "pending", modelVersion: FACE_PROMPT_VERSION } });
+
+  const analysis = await analyzeFaceImage(bytes);
+  if (!analysis.usable) {
+    await db().faceScan.update({
+      where: { id: scanId },
+      data: { status: "rejected", rejectReason: analysis.rejectReason, lightingQuality: analysis.lightingQuality },
+    });
+  } else {
+    const entries = Object.entries(analysis.metrics) as [SkinMetric, { score: number; zones: Record<string, number> }][];
+    const overallScore = Math.round(entries.reduce((sum, [, m]) => sum + m.score, 0) / entries.length);
+    await db().faceScan.update({
+      where: { id: scanId },
+      data: {
+        status: "done",
+        lightingQuality: analysis.lightingQuality,
+        makeupDetected: analysis.makeupDetected,
+        overallScore,
+        summary: analysis.summary,
+        metrics: { create: entries.map(([metric, m]) => ({ metric, score: m.score, zones: m.zones })) },
+      },
+    });
+  }
+  const scan = await getFaceScan(userId, scanId);
+  if (!scan) throw new Error("SCAN_NOT_FOUND");
   return scan;
 }
 
+async function toFaceScan(row: FaceScanRow & { metrics: ScanMetricRow[] }): Promise<FaceScan> {
+  return {
+    id: row.id,
+    userId: row.userId,
+    imageUrl: await signedPhotoUrl(row.imagePath),
+    takenAt: row.takenAt,
+    status: row.status,
+    rejectReason: row.rejectReason,
+    lightingQuality: row.lightingQuality,
+    makeupDetected: row.makeupDetected,
+    overallScore: row.overallScore,
+    summary: row.summary,
+    metrics: row.metrics.map<MetricResult>((m) => ({ metric: m.metric, score: m.score, zones: m.zones as Record<string, number> })),
+  };
+}
+
 export async function getFaceScan(userId: string, scanId: string) {
-  const scan = store.scans.get(scanId);
-  return scan && scan.userId === userId ? scan : null;
+  const row = await db().faceScan.findFirst({ where: { id: scanId, userId }, include: { metrics: true } });
+  return row ? toFaceScan(row) : null;
 }
 
 export async function listFaceScans(userId: string) {
-  return [...store.scans.values()]
-    .filter((s) => s.userId === userId)
-    .sort((a, b) => b.takenAt.getTime() - a.takenAt.getTime());
+  const rows = await db().faceScan.findMany({ where: { userId }, include: { metrics: true }, orderBy: { takenAt: "desc" } });
+  return Promise.all(rows.map(toFaceScan));
 }
 
 export async function getPreviousScan(userId: string, scan: FaceScan) {
-  return (await listFaceScans(userId)).find((s) => s.takenAt < scan.takenAt && s.status === "done") ?? null;
+  const row = await db().faceScan.findFirst({
+    where: { userId, status: "done", takenAt: { lt: scan.takenAt } },
+    include: { metrics: true },
+    orderBy: { takenAt: "desc" },
+  });
+  return row ? toFaceScan(row) : null;
 }
