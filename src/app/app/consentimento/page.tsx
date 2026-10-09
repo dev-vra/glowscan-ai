@@ -1,25 +1,29 @@
 import { Suspense } from "react";
-import { ShieldCheck } from "lucide-react";
+import { Lock, ShieldCheck } from "lucide-react";
 import { PageSkeleton } from "@/components/app/page-skeleton";
 import { Button } from "@/components/ui/button";
-import { Card, Eyebrow } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { requirePageUser } from "@/lib/auth";
 import { grantConsentAction } from "./actions";
 
 const COMMITMENTS = [
-  "Suas fotos ficam em armazenamento privado, acessíveis só por você.",
-  "Usamos a imagem apenas para gerar a sua análise.",
-  "Nunca usamos suas fotos para treinar modelos de IA.",
-  "Você pode excluir fotos e conta a qualquer momento, em Perfil.",
+  "Fica em armazenamento privado, só você acessa.",
+  "Serve só pra gerar a sua análise. Nunca treina IA.",
+  "Você apaga fotos e conta quando quiser, em Perfil.",
 ];
+
+const checkboxClass = "mt-0.5 size-6 shrink-0 accent-accent";
 
 async function ConsentForm() {
   await requirePageUser();
   return (
-    <form action={grantConsentAction} className="space-y-6">
-      <label className="flex items-start gap-3 text-sm">
-        <input type="checkbox" name="accept" required className="mt-0.5 size-5 accent-accent" />
-        Autorizo o tratamento das fotos do meu rosto para a análise estética da pele, conforme a LGPD (dado pessoal sensível).
+    <form action={grantConsentAction} className="space-y-5">
+      <label className="flex items-start gap-3">
+        <input type="checkbox" name="accept" required className={checkboxClass} />
+        <span>
+          <span className="block font-semibold">Autorizo a análise das fotos do meu rosto</span>
+          <span className="text-sm text-muted">Obrigatório. Dado pessoal sensível, conforme a LGPD.</span>
+        </span>
       </label>
       <Button type="submit" size="lg">Concordar e continuar</Button>
     </form>
@@ -28,17 +32,17 @@ async function ConsentForm() {
 
 export default function ConsentPage() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 pt-4">
       <header className="space-y-3">
-        <Eyebrow>Privacidade</Eyebrow>
-        <h1 className="font-display text-xl">Sua imagem, suas regras.</h1>
-        <p className="text-sm text-muted">Antes da primeira análise, precisamos da sua autorização explícita.</p>
+        <span className="grid size-14 place-items-center rounded-pill bg-accent-soft text-accent"><Lock className="size-6" strokeWidth={2} aria-hidden /></span>
+        <h1 className="font-display text-[30px] leading-9">Sua foto é sua.</h1>
+        <p className="text-muted">Antes da primeira análise, a gente precisa da sua autorização.</p>
       </header>
       <Card>
-        <ul className="space-y-3">
+        <ul className="space-y-4">
           {COMMITMENTS.map((item) => (
-            <li key={item} className="flex gap-3 text-sm">
-              <ShieldCheck className="size-5 shrink-0 text-success" strokeWidth={1.5} aria-hidden />
+            <li key={item} className="flex gap-3">
+              <ShieldCheck className="size-6 shrink-0 text-success" strokeWidth={2} aria-hidden />
               {item}
             </li>
           ))}
@@ -47,6 +51,7 @@ export default function ConsentPage() {
       <Suspense fallback={<PageSkeleton />}>
         <ConsentForm />
       </Suspense>
+      <p className="text-sm text-muted">A pesquisa anônima é opcional e fica em Perfil, desligada por padrão.</p>
     </div>
   );
 }

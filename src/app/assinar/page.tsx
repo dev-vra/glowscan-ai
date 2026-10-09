@@ -2,69 +2,77 @@ import { Suspense } from "react";
 import { Check } from "lucide-react";
 import { PageSkeleton } from "@/components/app/page-skeleton";
 import { Button } from "@/components/ui/button";
-import { Eyebrow } from "@/components/ui/card";
 import { requirePageUser } from "@/lib/auth";
-import { checkoutAction } from "./actions";
+import { getPlanPrices } from "@/lib/billing";
+import { BILLING_COPY } from "@/lib/copy";
+import { checkoutAction, portalAction } from "./actions";
 
 const BENEFITS = [
-  "Análises ilimitadas da pele com IA",
+  "Análise da pele por foto, sempre que quiser",
   "Leitura dos rótulos de todo o seu armário",
   "Rotina da manhã e da noite na ordem certa",
-  "Alertas de ativos que não combinam",
-  "Diário de evolução com gráficos",
+  "Gráficos da sua evolução",
 ];
-
-const PLANS = [
-  { id: "yearly", name: "Anual", price: "R$ 199", detail: "R$ 16,58/mês · economize 43%", featured: true },
-  { id: "monthly", name: "Mensal", price: "R$ 29", detail: "por mês", featured: false },
-] as const;
 
 async function PlanPicker() {
   await requirePageUser();
+  const prices = await getPlanPrices();
+  const plans = [
+    { id: "yearly", name: BILLING_COPY.annual.label, price: prices.yearly, detail: `${prices.yearlyPerMonth}/mês`, badge: prices.savingsPercent > 0 ? `Economize ${prices.savingsPercent}%` : null, featured: true },
+    { id: "monthly", name: BILLING_COPY.monthly.label, price: prices.monthly, detail: "por mês", badge: null, featured: false },
+  ];
   return (
-    <form action={checkoutAction} className="space-y-6">
+    <form action={checkoutAction} className="space-y-5">
       <fieldset className="space-y-3">
         <legend className="sr-only">Escolha o plano</legend>
-        {PLANS.map((plan) => (
+        {plans.map((plan) => (
           <label
             key={plan.id}
-            className="flex cursor-pointer items-center gap-4 rounded-md border border-border bg-surface-raised p-4 has-checked:border-gold has-checked:bg-accent-soft has-focus-visible:outline-2 has-focus-visible:outline-accent"
+            className="relative flex min-h-20 cursor-pointer items-center gap-4 rounded-[20px] border-[1.5px] border-[#E2D5CA] bg-surface-raised px-5 py-4 has-checked:border-[2.5px] has-checked:border-accent has-focus-visible:outline-2 has-focus-visible:outline-accent"
           >
             <input type="radio" name="plan" value={plan.id} defaultChecked={plan.featured} className="sr-only" />
+            {plan.badge && (
+              <span className="absolute -top-3 right-4 rounded-pill bg-accent px-3 py-1 text-xs font-bold text-on-accent">{plan.badge}</span>
+            )}
             <span className="flex-1">
-              <span className="flex items-center gap-2 font-semibold">
-                {plan.name}
-                {plan.featured && <span className="rounded-pill bg-gold px-2 py-0.5 text-xs text-on-accent">Melhor valor</span>}
-              </span>
+              <span className="block font-bold">{plan.name}</span>
               <span className="text-sm text-muted">{plan.detail}</span>
             </span>
             <span className="font-display text-xl tabular-nums">{plan.price}</span>
           </label>
         ))}
       </fieldset>
-      <Button type="submit" size="lg">Começar 3 dias grátis</Button>
-      <p className="text-center text-xs text-muted">Nenhuma cobrança hoje. Cancele em um clique, a qualquer momento, em Perfil.</p>
+      <Button type="submit" size="lg">{BILLING_COPY.cta}</Button>
+      <p className="text-center text-sm text-muted">
+        {prices.trialDays} dias grátis. Cancele quando quiser. Avisamos 2 dias antes de cobrar.
+      </p>
     </form>
   );
 }
 
 export default function PaywallPage() {
   return (
-    <main className="mx-auto max-w-content space-y-8 px-6 py-12">
+    <main className="mx-auto max-w-content space-y-8 px-5 py-10">
       <header className="space-y-3">
-        <Eyebrow>GlowScan Premium</Eyebrow>
-        <h1 className="font-display text-display">Seu sommelier de skincare.</h1>
+        <p className="font-display text-[32px] font-extrabold tracking-[-0.05em] text-accent">viço</p>
+        <h1 className="font-display text-[30px] leading-9">{BILLING_COPY.trialHeadline}</h1>
       </header>
       <ul className="space-y-3">
         {BENEFITS.map((benefit) => (
-          <li key={benefit} className="flex gap-3 text-sm">
-            <Check className="size-5 shrink-0 text-gold" aria-hidden /> {benefit}
+          <li key={benefit} className="flex items-center gap-3">
+            <span className="grid size-7 shrink-0 place-items-center rounded-pill bg-accent-soft text-accent"><Check className="size-4" strokeWidth={3} aria-hidden /></span>
+            {benefit}
           </li>
         ))}
       </ul>
       <Suspense fallback={<PageSkeleton />}>
         <PlanPicker />
       </Suspense>
+      <div className="flex justify-center gap-2 text-sm text-muted">
+        <span>Pagamento seguro</span>
+        <span aria-hidden>·</span>
+        <form action={portalAction}><button type="submit" className="underline underline-offset-4">Restaurar compra</button></form>
+      </div>
     </main>
   );
 }

@@ -18,7 +18,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "concerns",
     title: "O que você mais quer melhorar?",
-    subtitle: "Escolha quantos quiser.",
+    subtitle: "Escolha até 3.",
     multi: true,
     options: [
       { value: "lines", label: "Linhas finas e firmeza" },

@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { Sparkles } from "lucide-react";
 import { PageSkeleton } from "@/components/app/page-skeleton";
 import { buttonClasses } from "@/components/ui/button";
 import { Card, Eyebrow } from "@/components/ui/card";
+import { ConflictAlert } from "@/components/ui/conflict-alert";
 import { requirePageUser } from "@/lib/auth";
 import { getSkinProfile } from "@/lib/data/profile";
 import type { SkinType } from "@/generated/prisma/enums";
@@ -22,6 +22,12 @@ const CONCERN_LABELS: Record<string, string> = {
   redness: "vermelhidão", dullness: "viço", dehydration: "hidratação",
 };
 
+const STEPS = [
+  { title: "Ler sua pele", text: "Uma selfie com luz natural vira um Skin Score de 0 a 100 e 7 métricas." },
+  { title: "Ler seu armário", text: "Foto do rótulo e a gente entende cada ingrediente." },
+  { title: "Montar a ordem certa", text: "Manhã e noite, com aviso do que não combina." },
+];
+
 async function Plan() {
   const user = await requirePageUser();
   const profile = await getSkinProfile(user.id);
@@ -30,35 +36,38 @@ async function Plan() {
   const goals = profile.concerns.map((c) => CONCERN_LABELS[c]).filter(Boolean);
 
   return (
-    <div className="space-y-8">
-      <header className="space-y-3">
-        <Eyebrow className="flex items-center gap-2"><Sparkles className="size-3.5" aria-hidden /> Seu perfil</Eyebrow>
-        <h1 className="font-display text-display">{insight.name}</h1>
-        {goals.length > 0 && <p className="text-muted">Foco em {goals.join(", ")}.</p>}
+    <div className="space-y-6">
+      <header className="space-y-2">
+        <Eyebrow>Seu plano</Eyebrow>
+        <h1 className="font-display text-[44px] leading-[46px] font-extrabold tracking-[-0.035em]">{insight.name}</h1>
+        <p className="text-muted">
+          {goals.length > 0 && `Foco em ${goals.join(", ")}. `}A rotina prioriza {insight.focus}.
+        </p>
       </header>
-      <Card className="space-y-2">
-        <Eyebrow>Estratégia</Eyebrow>
-        <p className="text-sm">Sua rotina ideal prioriza {insight.focus}.</p>
-      </Card>
-      <Card className="space-y-2">
-        <Eyebrow>Próximos passos</Eyebrow>
-        <ol className="list-decimal space-y-1 pl-5 text-sm">
-          <li>Análise da pele por foto, com nota de 0 a 100</li>
-          <li>Leitura dos rótulos do seu armário</li>
-          <li>Rotina da manhã e da noite, com alertas de combinação</li>
-        </ol>
-      </Card>
+      <ol className="space-y-3">
+        {STEPS.map((step, i) => (
+          <li key={step.title}>
+            <Card className="flex gap-4 p-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-accent-soft font-display text-xl text-accent" aria-hidden>{i + 1}</span>
+              <span>
+                <span className="block font-bold">{step.title}</span>
+                <span className="text-sm text-muted">{step.text}</span>
+              </span>
+            </Card>
+          </li>
+        ))}
+      </ol>
       {profile.pregnantOrNursing && (
-        <p className="rounded-md bg-accent-soft p-4 text-sm">Vamos sinalizar ingredientes que pedem cautela na gestação e amamentação.</p>
+        <ConflictAlert level="info" title="Gestação e amamentação">A gente sinaliza ingredientes que pedem cautela nessa fase.</ConflictAlert>
       )}
-      <Link href="/assinar" className={buttonClasses("primary", "lg")}>Desbloquear minha rotina</Link>
+      <Link href="/assinar" className={buttonClasses("primary", "lg")}>Quero esse plano</Link>
     </div>
   );
 }
 
 export default function PlanPage() {
   return (
-    <main className="mx-auto min-h-dvh max-w-content px-6 py-12">
+    <main className="mx-auto min-h-dvh max-w-content px-5 py-10">
       <Suspense fallback={<PageSkeleton />}>
         <Plan />
       </Suspense>

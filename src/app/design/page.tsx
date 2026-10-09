@@ -13,7 +13,7 @@ export default function DesignPage() {
     <main className="mx-auto max-w-wide space-y-12 px-6 py-12">
       <header className="space-y-2">
         <Eyebrow>Design system</Eyebrow>
-        <h1 className="font-display text-display">GlowScan primitives</h1>
+        <h1 className="font-display text-display">Viço — componentes</h1>
       </header>
 
       <section className="space-y-4">

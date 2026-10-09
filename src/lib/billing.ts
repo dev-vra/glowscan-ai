@@ -5,7 +5,7 @@ import { env } from "@/lib/env";
 import type { SubscriptionStatus } from "@/generated/prisma/client";
 
 export type Plan = "monthly" | "yearly";
-const TRIAL_DAYS = 3;
+const TRIAL_DAYS = 7;
 
 let client: Stripe | undefined;
 function required(name: string, value: string | undefined) {
@@ -113,4 +113,22 @@ export async function handleStripeWebhook(rawBody: string, signature: string) {
     await db().stripeEvent.delete({ where: { id: event.id } }); // libera retry do Stripe
     throw error;
   }
+}
+
+const brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+const MONTHS_PER_YEAR = 12;
+
+// Preços lidos do Stripe: a tela de assinatura nunca mostra um valor diferente do cobrado.
+export async function getPlanPrices() {
+  const [monthly, yearly] = await Promise.all([stripe().prices.retrieve(priceFor("monthly")), stripe().prices.retrieve(priceFor("yearly"))]);
+  const monthlyCents = monthly.unit_amount ?? 0;
+  const yearlyCents = yearly.unit_amount ?? 0;
+  const savings = monthlyCents > 0 ? Math.round((1 - yearlyCents / (monthlyCents * MONTHS_PER_YEAR)) * 100) : 0;
+  return {
+    monthly: brl.format(monthlyCents / 100),
+    yearly: brl.format(yearlyCents / 100),
+    yearlyPerMonth: brl.format(yearlyCents / 100 / MONTHS_PER_YEAR),
+    savingsPercent: Math.max(0, savings),
+    trialDays: TRIAL_DAYS,
+  };
 }
