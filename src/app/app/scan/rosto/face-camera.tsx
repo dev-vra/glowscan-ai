@@ -3,12 +3,11 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { Camera, ImageUp, Sun } from "lucide-react";
 import { Button, buttonClasses } from "@/components/ui/button";
+import { toJpegDataUrl } from "@/lib/client-image";
 import { submitFaceScanAction } from "./actions";
 
 type CameraStatus = "starting" | "ready" | "denied" | "unavailable";
 
-const MAX_SIDE = 1280;
-const JPEG_QUALITY = 0.85;
 const LIGHT_SAMPLE_MS = 600;
 const MIN_LUMINANCE = 70;
 const MAX_LUMINANCE = 215;
@@ -25,21 +24,6 @@ function averageLuminance(source: CanvasImageSource, width: number, height: numb
   let sum = 0;
   for (let i = 0; i < data.length; i += 4) sum += 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
   return sum / (data.length / 4);
-}
-
-function toJpegDataUrl(source: CanvasImageSource, width: number, height: number, mirror: boolean) {
-  const scale = Math.min(1, MAX_SIDE / Math.max(width, height));
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.round(width * scale);
-  canvas.height = Math.round(height * scale);
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("CANVAS_UNAVAILABLE");
-  if (mirror) {
-    ctx.translate(canvas.width, 0);
-    ctx.scale(-1, 1);
-  }
-  ctx.drawImage(source, 0, 0, canvas.width, canvas.height);
-  return canvas.toDataURL("image/jpeg", JPEG_QUALITY);
 }
 
 function lightingHint(luminance: number | null) {

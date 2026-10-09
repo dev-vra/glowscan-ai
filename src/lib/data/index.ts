@@ -73,7 +73,7 @@ export async function hasActiveSubscription(userId: string) {
   return sub !== null && ACTIVE_SUBSCRIPTION.includes(sub.status);
 }
 
-function decodeJpegDataUrl(dataUrl: string) {
+export function decodeJpegDataUrl(dataUrl: string) {
   const match = /^data:image\/jpeg;base64,(.+)$/.exec(dataUrl);
   if (!match) throw new Error("INVALID_IMAGE");
   const bytes = Buffer.from(match[1], "base64");
