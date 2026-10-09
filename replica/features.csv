@@ -1,0 +1,31 @@
+feature,area,priority,original,clone,notes
+Onboarding quiz de perfil,onboarding,must,yes,no,S02 tipo de pele/preocupações/gestante
+Plano/perfil gerado pré-paywall,onboarding,must,yes,no,S03
+Auth magic link + Google,auth,must,yes,partial,S04
+Paywall com trial 3 dias,billing,must,yes,no,S05 mensal/anual
+Checkout + webhook assinatura,billing,must,yes,no,Stripe ou Mercado Pago (Pix)
+Consentimento LGPD foto facial,privacy,must,n/a,yes,S17 dado sensível
+Scan do rosto com guia e checagem de luz,scan,must,yes,yes,S07 análogo à foto do prato
+Análise de pele por IA de visão,scan,must,yes,partial,S08 métricas 0-100 + zonas
+Resultado editável/feedback,scan,should,yes,no,usuário corrige análise
+Scan de rótulo → extração INCI,products,must,yes,no,S09 análogo à foto
+Código de barras,products,could,yes,no,precisa base de produtos
+Busca/entrada manual de produto,products,must,yes,no,fallback
+Armário de produtos,products,must,yes,no,S11
+Base de ingredientes curada,engine,must,n/a,no,famílias + flags
+Motor de conflitos determinístico,engine,must,n/a,no,S12/S13
+Ordenação automática AM/PM,engine,must,n/a,no,textura/pH/categoria
+Frequência por ativo (dias da semana),engine,should,n/a,no,retinoide 3x/sem
+Alerta gestante/fotossensibilizante,engine,must,n/a,no,
+Home com Skin Score em anel,dashboard,must,yes,partial,S06
+Checklist rotina diária + streak,dashboard,should,yes,no,F04
+Check-in diário,journal,should,n/a,no,S15
+Gráficos de evolução por métrica,journal,must,yes,no,S14
+Antes/depois lado a lado,journal,should,yes,no,
+Lembretes push (rotina/re-scan),engagement,should,yes,no,PWA push
+Dark mode,ui,could,yes,no,
+Exportar/excluir dados,privacy,must,n/a,no,LGPD
+Sync Apple Health/Google Fit,integrations,could,yes,no,skip no MVP web
+Depth sensor volume,scan,skip,yes,no,irrelevante p/ skincare
+Base de alimentos,data,skip,yes,no,fora do domínio
+Diagnóstico dermatológico,scan,skip,n/a,no,ato médico — proibido

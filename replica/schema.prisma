@@ -1,0 +1,281 @@
+// GlowScan AI — fonte de verdade do schema (Prisma 7 / PostgreSQL)
+// Autorização: checada por userId na camada de dados. RLS habilitada via migration SQL crua.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SkinType {
+  dry
+  oily
+  combination
+  normal
+  sensitive
+}
+
+enum ConsentKind {
+  facial_photo
+  marketing
+}
+
+enum ScanStatus {
+  pending
+  done
+  rejected
+}
+
+enum SkinMetric {
+  texture
+  redness
+  pores
+  fine_lines
+  spots
+  oiliness
+  hydration
+}
+
+enum ProductCategory {
+  cleanser
+  toner
+  essence
+  serum
+  treatment
+  eye
+  moisturizer
+  oil
+  spf
+  mask
+  exfoliant
+  other
+}
+
+enum Period {
+  am
+  pm
+  both
+}
+
+enum IngredientFamily {
+  retinoid
+  aha
+  bha
+  pha
+  vitamin_c
+  niacinamide
+  benzoyl_peroxide
+  peptide
+  copper_peptide
+  azelaic_acid
+  ceramide
+  hyaluronic
+  sunscreen_filter
+  fragrance
+  alcohol_drying
+  other
+}
+
+enum Severity {
+  info
+  warn
+  critical
+}
+
+enum SubscriptionStatus {
+  trialing
+  active
+  past_due
+  canceled
+}
+
+model User {
+  id            String         @id @db.Uuid // = auth.users.id (Supabase)
+  email         String         @unique
+  createdAt     DateTime       @default(now()) @db.Timestamptz
+  updatedAt     DateTime       @updatedAt @db.Timestamptz
+  profile       SkinProfile?
+  consents      Consent[]
+  scans         FaceScan[]
+  products      Product[]
+  routines      Routine[]
+  routineLogs   RoutineLog[]
+  checkIns      CheckIn[]
+  subscription  Subscription?
+}
+
+model SkinProfile {
+  userId             String    @id @db.Uuid
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skinType           SkinType
+  concerns           String[]
+  ageRange           String
+  city               String?
+  timezone           String    @default("America/Sao_Paulo")
+  pregnantOrNursing  Boolean   @default(false)
+  monthlyBudgetCents Int?
+  currency           String    @default("BRL")
+  createdAt          DateTime  @default(now()) @db.Timestamptz
+  updatedAt          DateTime  @updatedAt @db.Timestamptz
+}
+
+model Consent {
+  id        String      @id @default(uuid()) @db.Uuid
+  userId    String      @db.Uuid
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      ConsentKind
+  grantedAt DateTime    @default(now()) @db.Timestamptz
+  revokedAt DateTime?   @db.Timestamptz
+
+  @@index([userId, kind])
+}
+
+model FaceScan {
+  id              String       @id @default(uuid()) @db.Uuid
+  userId          String       @db.Uuid
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  imagePath       String
+  takenAt         DateTime     @default(now()) @db.Timestamptz
+  status          ScanStatus   @default(pending)
+  rejectReason    String?
+  lightingQuality Int?         // 0–100
+  makeupDetected  Boolean      @default(false)
+  overallScore    Int?         // 0–100
+  modelVersion    String?
+  summary         String?
+  metrics         ScanMetric[]
+  createdAt       DateTime     @default(now()) @db.Timestamptz
+  updatedAt       DateTime     @updatedAt @db.Timestamptz
+
+  @@index([userId, takenAt(sort: Desc)])
+}
+
+model ScanMetric {
+  id     String     @id @default(uuid()) @db.Uuid
+  scanId String     @db.Uuid
+  scan   FaceScan   @relation(fields: [scanId], references: [id], onDelete: Cascade)
+  metric SkinMetric
+  score  Int        // 0–100, maior = melhor
+  zones  Json       @default("{}")
+
+  @@unique([scanId, metric])
+}
+
+model Product {
+  id          String              @id @default(uuid()) @db.Uuid
+  userId      String              @db.Uuid
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  brand       String
+  name        String
+  category    ProductCategory
+  imagePath   String?
+  barcode     String?
+  inciRaw     String?
+  period      Period              @default(both)
+  openedAt    DateTime?           @db.Date
+  ingredients ProductIngredient[]
+  steps       RoutineStep[]
+  createdAt   DateTime            @default(now()) @db.Timestamptz
+  updatedAt   DateTime            @updatedAt @db.Timestamptz
+
+  @@index([userId, category])
+}
+
+model Ingredient {
+  id                 String              @id @default(uuid()) @db.Uuid
+  inciName           String              @unique
+  aliases            String[]
+  family             IngredientFamily    @default(other)
+  photosensitizing   Boolean             @default(false)
+  pregnancyCaution   Boolean             @default(false)
+  products           ProductIngredient[]
+}
+
+model ProductIngredient {
+  productId    String     @db.Uuid
+  product      Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  ingredientId String     @db.Uuid
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Restrict)
+  position     Int
+
+  @@id([productId, ingredientId])
+  @@index([ingredientId])
+}
+
+model ConflictRule {
+  id      String           @id @default(uuid()) @db.Uuid
+  familyA IngredientFamily // check SQL: familyA < familyB
+  familyB IngredientFamily
+  severity Severity
+  advice  String
+
+  @@unique([familyA, familyB])
+}
+
+model Routine {
+  id          String        @id @default(uuid()) @db.Uuid
+  userId      String        @db.Uuid
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  period      Period        // am | pm
+  version     Int           @default(1)
+  generatedAt DateTime      @default(now()) @db.Timestamptz
+  steps       RoutineStep[]
+
+  @@unique([userId, period])
+}
+
+model RoutineStep {
+  id         String   @id @default(uuid()) @db.Uuid
+  routineId  String   @db.Uuid
+  routine    Routine  @relation(fields: [routineId], references: [id], onDelete: Cascade)
+  productId  String   @db.Uuid
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  order      Int
+  daysOfWeek Int[]    @default([0, 1, 2, 3, 4, 5, 6])
+
+  @@index([routineId, order])
+  @@index([productId])
+}
+
+model RoutineLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @db.Uuid
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date        DateTime @db.Date
+  period      Period
+  stepIdsDone String[] @db.Uuid
+
+  @@unique([userId, date, period])
+}
+
+model CheckIn {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      DateTime @db.Date
+  feeling   Int      // 1–5
+  reactions String[]
+  notes     String?
+
+  @@unique([userId, date])
+}
+
+model Subscription {
+  userId               String             @id @db.Uuid
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeCustomerId     String             @unique
+  stripeSubscriptionId String?            @unique
+  status               SubscriptionStatus
+  plan                 String             // monthly | yearly
+  currentPeriodEnd     DateTime?          @db.Timestamptz
+  updatedAt            DateTime           @updatedAt @db.Timestamptz
+}
+
+model StripeEvent {
+  id          String   @id // id do evento Stripe → idempotência
+  type        String
+  processedAt DateTime @default(now()) @db.Timestamptz
+}
