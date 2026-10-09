@@ -5,3 +5,8 @@
 /* Scan: contorno de contagem antes da captura automática (3s linear). */
 @keyframes vico-countdown { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
 .countdown-ring { stroke-dasharray: 100; animation: vico-countdown 3s linear forwards; }
+
+/* Bricolage é sempre display: peso e tracking padrão (utilitários de peso sobrescrevem). */
+@layer base {
+  .font-display { font-weight: 700; letter-spacing: -0.02em; }
+}

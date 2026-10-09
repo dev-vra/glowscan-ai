@@ -1,6 +1,8 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { setPregnantOrNursing } from "@/lib/data/profile";
 import { deleteAccount, grantConsent, requireUser, revokeConsent, revokeFacialConsent, signOut } from "@/lib/data";
 
 export async function signOutAction() {
@@ -27,4 +29,11 @@ export async function deleteAccountAction(formData: FormData) {
   await deleteAccount(user.id);
   await signOut();
   redirect("/?conta=excluida");
+}
+
+export async function togglePregnantAction(formData: FormData) {
+  const user = await requireUser();
+  await setPregnantOrNursing(user.id, formData.get("enable") === "1");
+  revalidatePath("/app/perfil");
+  revalidatePath("/app/rotina");
 }
