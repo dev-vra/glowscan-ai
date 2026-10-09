@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone", // imagem Docker enxuta (VPS)
   experimental: {
     serverActions: { bodySizeLimit: "4mb" },
   },
