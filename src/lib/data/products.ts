@@ -2,7 +2,7 @@ import "server-only";
 import { extractLabel, type LabelExtraction } from "@/lib/ai/extract-label";
 import { db } from "@/lib/db";
 import { normalizeInci } from "@/lib/routine/catalog";
-import { planRoutine, type EngineProduct, type RoutinePlan } from "@/lib/routine/engine";
+import { PM_FAMILIES, planRoutine, type EngineProduct, type RoutinePlan } from "@/lib/routine/engine";
 import { signedPhotoUrl, uploadPhoto } from "@/lib/supabase";
 import type { Period, ProductCategory } from "@/generated/prisma/enums";
 import { decodeJpegDataUrl, hasActiveSubscription } from "./index";
@@ -127,4 +127,15 @@ export async function saveRoutinePlan(userId: string) {
     }
   });
   return plan;
+}
+
+// "Aplicar na rotina": tira do período o produto que não deveria estar ali e recalcula o plano.
+// Manhã → leva para a noite o que tem ativo noturno; noite → leva para a manhã o outro.
+export async function applyConflictSuggestion(userId: string, productIds: [string, string], period: "am" | "pm") {
+  const products = await db().product.findMany({ where: { userId, id: { in: productIds } }, include: productInclude });
+  if (products.length !== 2) throw new Error("NOT_FOUND");
+  const hasNightActive = (p: ProductWithIngredients) => p.ingredients.some(({ ingredient }) => PM_FAMILIES.has(ingredient.family));
+  const target = period === "am" ? (products.find(hasNightActive) ?? products[1]) : (products.find((p) => !hasNightActive(p)) ?? products[0]);
+  await db().product.update({ where: { id: target.id }, data: { period: period === "am" ? "pm" : "am" } });
+  return saveRoutinePlan(userId);
 }

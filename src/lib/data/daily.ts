@@ -72,3 +72,24 @@ export async function getEvolution(userId: string) {
     orderBy: { takenAt: "asc" },
   });
 }
+
+const DAY_MS = 86_400_000;
+const STREAK_LOOKBACK_DAYS = 120;
+
+// Dias seguidos com pelo menos um passo feito, contando de hoje (ou de ontem, se hoje ainda está vazio).
+export async function getStreak(userId: string) {
+  const profile = await db().skinProfile.findUnique({ where: { userId } });
+  const { date: today } = localToday(profile?.timezone);
+  const logs = await db().routineLog.findMany({
+    where: { userId, date: { gte: new Date(today.getTime() - STREAK_LOOKBACK_DAYS * DAY_MS) } },
+    select: { date: true, stepIdsDone: true },
+  });
+  const active = new Set(logs.filter((l) => l.stepIdsDone.length > 0).map((l) => l.date.getTime()));
+  let cursor = active.has(today.getTime()) ? today.getTime() : today.getTime() - DAY_MS;
+  let streak = 0;
+  while (active.has(cursor)) {
+    streak++;
+    cursor -= DAY_MS;
+  }
+  return streak;
+}

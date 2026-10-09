@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireUser } from "@/lib/data";
 import { saveCheckIn, toggleRoutineStep } from "@/lib/data/daily";
+import { applyConflictSuggestion } from "@/lib/data/products";
 
 const toggleSchema = z.object({ period: z.enum(["am", "pm"]), stepId: z.uuid(), done: z.boolean() });
 
@@ -24,5 +25,15 @@ export async function checkInAction(formData: FormData) {
   const parsed = checkInSchema.safeParse({ feeling: formData.get("feeling"), reactions: formData.getAll("reactions") });
   if (!parsed.success) return;
   await saveCheckIn(user.id, parsed.data.feeling, parsed.data.reactions, null);
+  revalidatePath("/app");
+}
+
+const suggestionSchema = z.object({ productIds: z.tuple([z.uuid(), z.uuid()]), period: z.enum(["am", "pm"]) });
+
+export async function applySuggestionAction(input: { productIds: [string, string]; period: "am" | "pm" }) {
+  const user = await requireUser();
+  const { productIds, period } = suggestionSchema.parse(input);
+  await applyConflictSuggestion(user.id, productIds, period);
+  revalidatePath("/app/rotina");
   revalidatePath("/app");
 }

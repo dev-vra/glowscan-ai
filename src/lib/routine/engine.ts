@@ -26,7 +26,7 @@ const CATEGORY_ORDER: Record<ProductCategory, number> = {
   cleanser: 1, exfoliant: 2, toner: 3, mask: 4, essence: 5, treatment: 6, serum: 7, eye: 8, moisturizer: 9, oil: 10, spf: 11, other: 7,
 };
 
-const PM_FAMILIES = new Set<IngredientFamily>(["retinoid", "aha", "bha", "benzoyl_peroxide", "copper_peptide"]);
+export const PM_FAMILIES = new Set<IngredientFamily>(["retinoid", "aha", "bha", "benzoyl_peroxide", "copper_peptide"]);
 const AM_FAMILIES = new Set<IngredientFamily>(["vitamin_c"]);
 const EXFOLIANT_FAMILIES = new Set<IngredientFamily>(["aha", "bha"]);
 
