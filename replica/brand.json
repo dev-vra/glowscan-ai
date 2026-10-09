@@ -1,0 +1,6 @@
+{
+  "name": "Viço",
+  "avoid": ["Cal AI", "CalAI", "Cal-AI", "GlowScan", "Glow Scan", "sommelier"],
+  "domains": ["calai.app", "glowscan.ai"],
+  "colors": ["#7A5A3C", "#FBF8F4", "#9A7542", "#EADBC8", "#231B16", "#C8765A"]
+}

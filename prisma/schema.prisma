@@ -1,4 +1,4 @@
-// GlowScan AI — fonte de verdade do schema (Prisma 7 / PostgreSQL)
+// Viço — fonte de verdade do schema (Prisma 7 / PostgreSQL)
 // Autorização: checada por userId na camada de dados. RLS habilitada via migration SQL crua.
 
 generator client {
