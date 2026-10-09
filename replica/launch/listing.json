@@ -1,0 +1,16 @@
+{
+  "avoid": ["Cal AI", "CalAI", "Cal-AI", "GlowScan", "Glow Scan", "sommelier"],
+  "app_store": {
+    "name": "Viço: Pele e Rotina",
+    "subtitle": "Análise da pele e skincare",
+    "promotional_text": "Uma selfie lê sua pele, uma foto do rótulo lê seus produtos, e a rotina sai na ordem certa. Teste grátis por 7 dias.",
+    "description": "O Viço liga três coisas que nenhum app junta: sua pele, os produtos que você já tem e o resultado ao longo das semanas.\n\nCOMO FUNCIONA\n1. Tire uma selfie com luz natural. Em segundos você recebe um Skin Score de 0 a 100 e 7 métricas: textura, vermelhidão, poros, linhas finas, manchas, oleosidade e hidratação aparente.\n2. Fotografe o verso dos seus cosméticos. O Viço lê a lista de ingredientes (INCI), inclusive de produtos de farmácia brasileira.\n3. Receba a rotina da manhã e da noite na ordem certa, com aviso quando dois ativos não combinam, como retinol e ácidos na mesma noite.\n\nO QUE MUDA NA PRÁTICA\n- Guia de luz em tempo real na câmera: menos foto perdida, leitura mais justa.\n- Alertas de combinação com sugestão aplicada em um toque.\n- Checklist diário com sequência de dias.\n- Gráfico da evolução e antes/depois arrastável.\n- Card pra compartilhar seu resultado, sem mostrar seu rosto.\n\nPRIVACIDADE\nSuas fotos ficam em armazenamento privado, servem só pra sua análise e nunca treinam IA. Você apaga tudo quando quiser.\n\nASSINATURA\n7 dias grátis. Depois, plano mensal ou anual. Avisamos 2 dias antes de cobrar e o cancelamento leva um toque.\n\nO Viço faz análise cosmética. Não é diagnóstico médico e não substitui um dermatologista.",
+    "keywords": "dermatologia,retinol,acne,manchas,cosmeticos,ingredientes,beleza,serum,protetor,hidratante,poros",
+    "whats_new": "Novo visual e câmera com guia de luz em tempo real."
+  },
+  "google_play": {
+    "title": "Viço: Pele e Rotina",
+    "short_description": "Selfie lê sua pele, foto do rótulo lê seus produtos. Rotina na ordem certa.",
+    "full_description": "O Viço liga três coisas que nenhum app junta: sua pele, os produtos que você já tem e o resultado ao longo das semanas.\n\nCOMO FUNCIONA\n1. Tire uma selfie com luz natural e receba um Skin Score de 0 a 100 e 7 métricas.\n2. Fotografe o verso dos seus cosméticos. O Viço lê a lista de ingredientes, inclusive de produtos de farmácia brasileira.\n3. Receba a rotina da manhã e da noite na ordem certa, com aviso quando dois ativos não combinam.\n\nO QUE MUDA NA PRÁTICA\n- Guia de luz em tempo real na câmera.\n- Alertas de combinação com sugestão aplicada em um toque.\n- Checklist diário com sequência de dias.\n- Gráfico da evolução e antes/depois.\n- Card pra compartilhar seu resultado, sem mostrar seu rosto.\n\nPRIVACIDADE\nFotos em armazenamento privado, usadas só pra sua análise, nunca pra treinar IA.\n\nASSINATURA\n7 dias grátis. Avisamos 2 dias antes de cobrar. Cancelamento em um toque.\n\nAnálise cosmética, não é diagnóstico médico."
+  }
+}
