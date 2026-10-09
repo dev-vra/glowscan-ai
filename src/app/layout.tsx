@@ -15,6 +15,7 @@ const figtree = Figtree({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://vico.bitrilha.com.br"),
   title: "Viço",
   description: "Sua pele lida, sua rotina na ordem certa.",
   manifest: "/manifest.webmanifest",

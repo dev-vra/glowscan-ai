@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 // App nativo = casca do site em produção (server.url). Trocar CAP_SERVER_URL ao mudar de domínio.
-const serverUrl = process.env.CAP_SERVER_URL ?? "https://vico-beta.vercel.app";
+const serverUrl = process.env.CAP_SERVER_URL ?? "https://vico.bitrilha.com.br";
 
 const config: CapacitorConfig = {
   appId: "app.vico.beta",
