@@ -47,3 +47,4 @@ replica/design-handoff/*.zip
 
 .vercel
 .env*
+__pycache__/

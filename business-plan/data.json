@@ -1,0 +1,345 @@
+{
+ "scenarios": {
+  "Conservador": {
+   "subs5": 69589.07875601403,
+   "gross5": 16389355.682171155,
+   "ebitda3": -870059.7198841823,
+   "ebitda5": 952365.7810186881,
+   "need": 2759356.228857173,
+   "be": 35,
+   "ltv": 172.16969,
+   "years": [
+    {
+     "year": 1,
+     "subs_end": 2465.2619860199125,
+     "new_subs": 3150.0,
+     "gross": 331468.5767069051,
+     "gross_subs": 324612.6268775469,
+     "b2b": 6855.949829358185,
+     "net": 262545.7705813908,
+     "ai": 25709.81186009319,
+     "opex": 642000,
+     "marketing": 300000,
+     "ebitda": -405164.0412787024,
+     "cash_end": -405164.0412787023,
+     "arr_end": 547998.2814227499,
+     "cac": 133.33333333333334
+    },
+    {
+     "year": 2,
+     "subs_end": 12251.531134772906,
+     "new_subs": 14959.999999999998,
+     "gross": 2068899.7601045019,
+     "gross_subs": 1830888.1905292643,
+     "b2b": 238011.56957523743,
+     "net": 1658231.9674400801,
+     "ai": 146271.69295357013,
+     "opex": 2532000,
+     "marketing": 1320000,
+     "ebitda": -1020039.7255134899,
+     "cash_end": -1425203.7667921924,
+     "arr_end": 2717797.203070144,
+     "cac": 150.0
+    },
+    {
+     "year": 3,
+     "subs_end": 29755.493722396917,
+     "new_subs": 34560.0,
+     "gross": 5955338.3371478245,
+     "gross_subs": 4999069.046982851,
+     "b2b": 956269.2901649739,
+     "net": 4800344.215363279,
+     "ai": 402403.93524746085,
+     "opex": 5268000,
+     "marketing": 2880000,
+     "ebitda": -870059.7198841823,
+     "cash_end": -2295263.486676375,
+     "arr_end": 6585748.6492522,
+     "cac": 166.66666666666666
+    },
+    {
+     "year": 4,
+     "subs_end": 49421.241667961265,
+     "new_subs": 54720.0,
+     "gross": 10938602.654946545,
+     "gross_subs": 9131055.3388786,
+     "b2b": 1807547.3160679445,
+     "net": 8822250.829014566,
+     "ai": 739434.1450849308,
+     "opex": 8220000,
+     "marketing": 4560000,
+     "ebitda": -137183.31607036502,
+     "cash_end": -2432446.8027467406,
+     "arr_end": 10914135.191636827,
+     "cac": 183.33333333333334
+    },
+    {
+     "year": 5,
+     "subs_end": 69589.07875601403,
+     "new_subs": 74880.0,
+     "gross": 16389355.682171155,
+     "gross_subs": 13517390.156429928,
+     "b2b": 2871965.5257412274,
+     "net": 13234787.541489335,
+     "ai": 1098421.760470647,
+     "opex": 11184000,
+     "marketing": 6240000,
+     "ebitda": 952365.7810186881,
+     "cash_end": -1480081.0217280528,
+     "arr_end": 15346169.377609491,
+     "cac": 200.0
+    }
+   ]
+  },
+  "Base": {
+   "subs5": 125827.5319593116,
+   "gross5": 28209674.223901674,
+   "ebitda3": 1962596.1619740694,
+   "ebitda5": 9492488.293101199,
+   "need": 607585.6501719453,
+   "be": 19,
+   "ltv": 205.04209743589743,
+   "years": [
+    {
+     "year": 1,
+     "subs_end": 4122.060381849647,
+     "new_subs": 5040.0,
+     "gross": 555137.5971541622,
+     "gross_subs": 543776.1742742545,
+     "b2b": 11361.422879907705,
+     "net": 439694.8440397789,
+     "ai": 42605.33579965389,
+     "opex": 642000,
+     "marketing": 300000,
+     "ebitda": -244910.49175987497,
+     "cash_end": -244910.49175987495,
+     "arr_end": 929876.4420966745,
+     "cac": 83.33333333333333
+    },
+    {
+     "year": 2,
+     "subs_end": 20871.7352890078,
+     "new_subs": 23936.0,
+     "gross": 3421445.835830927,
+     "gross_subs": 3129668.4619529215,
+     "b2b": 291777.37387800554,
+     "net": 2732119.9476942327,
+     "ai": 247082.57602126032,
+     "opex": 2532000,
+     "marketing": 1320000,
+     "ebitda": -46962.62832702763,
+     "cash_end": -291873.1200869024,
+     "arr_end": 4697558.504355531,
+     "cac": 93.74999999999999
+    },
+    {
+     "year": 3,
+     "subs_end": 51797.67309759314,
+     "new_subs": 55296.0,
+     "gross": 9885849.730556026,
+     "gross_subs": 8734974.641152319,
+     "b2b": 1150875.0894037075,
+     "net": 7924908.796079631,
+     "ai": 694312.6341055613,
+     "opex": 5268000,
+     "marketing": 2880000,
+     "ebitda": 1962596.1619740694,
+     "cash_end": 1670723.041887167,
+     "arr_end": 11627399.64156083,
+     "cac": 104.16666666666667
+    },
+    {
+     "year": 4,
+     "subs_end": 87959.02294888921,
+     "new_subs": 87552.0,
+     "gross": 18572849.434211932,
+     "gross_subs": 16313589.086903337,
+     "b2b": 2259260.3473085947,
+     "net": 14898477.087758284,
+     "ai": 1304075.4341357432,
+     "opex": 8220000,
+     "marketing": 4560000,
+     "ebitda": 5374401.653622542,
+     "cash_end": 7045124.695509709,
+     "arr_end": 19692131.519128095,
+     "cac": 114.58333333333334
+    },
+    {
+     "year": 5,
+     "subs_end": 125827.5319593116,
+     "new_subs": 119808.0,
+     "gross": 28209674.223901674,
+     "gross_subs": 24580549.664109368,
+     "b2b": 3629124.5597923063,
+     "net": 22648555.09286155,
+     "ai": 1972066.7997603535,
+     "opex": 11184000,
+     "marketing": 6240000,
+     "ebitda": 9492488.293101199,
+     "cash_end": 16537612.98861091,
+     "arr_end": 28116654.92114231,
+     "cac": 125.0
+    }
+   ]
+  },
+  "Otimista": {
+   "subs5": 195912.48556166593,
+   "gross5": 42967351.77360884,
+   "ebitda3": 5238828.037027083,
+   "ebitda5": 20170546.653978284,
+   "need": 211463.52535367626,
+   "be": 16,
+   "ltv": 249.50879191919196,
+   "years": [
+    {
+     "year": 1,
+     "subs_end": 5896.979582305081,
+     "new_subs": 6930.0,
+     "gross": 793398.2508510014,
+     "gross_subs": 777300.6571616575,
+     "b2b": 16097.593689343897,
+     "net": 628394.3775412255,
+     "ai": 60365.97633503961,
+     "opex": 642000,
+     "marketing": 300000,
+     "ebitda": -73971.59879381413,
+     "cash_end": -73971.59879381409,
+     "arr_end": 1347049.099192758,
+     "cac": 60.606060606060595
+    },
+    {
+     "year": 2,
+     "subs_end": 30437.851161829636,
+     "new_subs": 32912.0,
+     "gross": 4919583.113829548,
+     "gross_subs": 4569126.266161702,
+     "b2b": 350456.84766784584,
+     "net": 3921516.3446921273,
+     "ai": 357106.58937721094,
+     "opex": 2532000,
+     "marketing": 1320000,
+     "ebitda": 1032409.7553149161,
+     "cash_end": 958438.1565211022,
+     "arr_end": 6937323.587154696,
+     "cac": 68.18181818181817
+    },
+    {
+     "year": 3,
+     "subs_end": 77270.61433411314,
+     "new_subs": 76032.00000000001,
+     "gross": 14424999.327791117,
+     "gross_subs": 13052912.590699762,
+     "b2b": 1372086.737091356,
+     "net": 11532958.142664118,
+     "ai": 1026130.1056370338,
+     "opex": 5268000,
+     "marketing": 2880000,
+     "ebitda": 5238828.037027083,
+     "cash_end": 6197266.193548186,
+     "arr_end": 17564785.550033003,
+     "cac": 75.75757575757575
+    },
+    {
+     "year": 4,
+     "subs_end": 134414.99329260943,
+     "new_subs": 120384.0,
+     "gross": 27769980.207221586,
+     "gross_subs": 24975280.68030134,
+     "b2b": 2794699.526920245,
+     "net": 22217754.31639708,
+     "ai": 1973374.4086503065,
+     "opex": 8220000,
+     "marketing": 4560000,
+     "ebitda": 12024379.90774677,
+     "cash_end": 18221646.101294953,
+     "arr_end": 30468952.769981693,
+     "cac": 83.33333333333333
+    },
+    {
+     "year": 5,
+     "subs_end": 195912.48556166593,
+     "new_subs": 164736.00000000003,
+     "gross": 42967351.77360884,
+     "gross_subs": 38407819.20329898,
+     "b2b": 4559532.570309861,
+     "net": 34400161.15818197,
+     "ai": 3045614.504203685,
+     "opex": 11184000,
+     "marketing": 6240000,
+     "ebitda": 20170546.653978284,
+     "cash_end": 38392192.75527324,
+     "arr_end": 44311847.754193276,
+     "cac": 90.90909090909089
+    }
+   ]
+  }
+ },
+ "sources": [
+  [
+   "Mercado de beleza BR ~R$ 200 bi (2025); 3º maior do mundo",
+   "ABIHPEC",
+   "https://abihpec.org.br/tamanho-mercado-cosmeticos-brasil-2026/"
+  ],
+  [
+   "Beleza BR R$ 186,9 bi em 2025, +6,8%",
+   "Euromonitor via Folha do Litoral",
+   "https://folhadolitoral.com.br/editorias/economia/mercado-de-beleza-no-brasil-cresce-em-2025/"
+  ],
+  [
+   "Dermocosméticos R$ 12,3 bi (12m até jul/25), +8,3%; 83% em loja física",
+   "IQVIA via Panorama Farmacêutico",
+   "https://panoramafarmaceutico.com.br/mercado-de-dermocosmeticos-movimenta-r-123-bilhoes/"
+  ],
+  [
+   "Apps de análise de pele US$ 1,82 bi (2025), CAGR 17,2% até 2036",
+   "Future Market Insights",
+   "https://www.futuremarketinsights.com/reports/skin-analysis-mobile-apps-market"
+  ],
+  [
+   "88% das mulheres e 64% dos homens usam skincare",
+   "MindMiners (2024) via O Hoje",
+   "https://ohoje.com/2025/02/27/skincare-o-novo-vicio-dos-brasileiros/"
+  ],
+  [
+   "23% usam assistentes de IA para escolher beleza; influenciadores 32% da descoberta",
+   "Mercado & Consumo (out/2026)",
+   "https://mercadoeconsumo.com.br/07/10/2026/noticias-varejo/seis-em-cada-dez-brasileiros-gastam-mais-de-r-100-por-mes-com-beleza/"
+  ],
+  [
+   "Teste→pago mediana Saúde & Fitness 39,9%; 2x maior no iOS",
+   "RevenueCat — State of Subscription Apps 2025",
+   "https://revenuecat.com/state-of-subscription-apps-2025"
+  ],
+  [
+   "Cal AI: ~US$ 30 mi ARR, adquirido pela MyFitnessPal (2025/26)",
+   "Imprensa (não auditado)",
+   "https://neuronfeed.com/startups/cal-ai"
+  ],
+  [
+   "Skan: soft paywall, anual US$ 24,99–39,99",
+   "App Store / AppPricingLab",
+   "https://apppricinglab.com/app/apple/6449196562"
+  ],
+  [
+   "Meta repassa 12,15% de impostos ao anunciante no BR",
+   "Tecnoblog",
+   "https://tecnoblog.net/noticias/meta-decide-repassar-os-custos-com-impostos-no-brasil-para-os-anunciantes/"
+  ],
+  [
+   "Beautytechs BR: B4A captou R$ 15 mi; UAUBox seed R$ 6 mi",
+   "Startupi / Startups",
+   "https://startupi.com.br/b4a-capta-r-15-milhoes-para-expandir-parcerias/"
+  ],
+  [
+   "216 reviews de 9 apps concorrentes (dores e pedidos)",
+   "Pesquisa própria",
+   "replica/fixes.md"
+  ]
+ ],
+ "ue": {
+  "arpu": 19.91,
+  "net_arpu": 14.228900000000001,
+  "life_months": 14.410256410256409,
+  "ltv": 205.04209743589743
+ }
+}
