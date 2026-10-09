@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { PageSkeleton } from "@/components/app/page-skeleton";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/card";
+import { buyLinks } from "@/lib/affiliate";
 import { requirePageUser } from "@/lib/auth";
 import { getProduct } from "@/lib/data/products";
 import { deleteProductAction } from "../actions";
@@ -43,6 +44,19 @@ async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
           imagePath: product.imagePath,
         }}
       />
+      <section aria-labelledby="buy" className="space-y-2">
+        <h2 id="buy" className="text-sm font-semibold">Acabou? Comprar de novo</h2>
+        <ul className="flex flex-wrap gap-2">
+          {buyLinks(product.brand, product.name).map(({ store, url }) => (
+            <li key={store}>
+              <a href={url} target="_blank" rel="sponsored noopener noreferrer" className="inline-flex h-11 items-center rounded-pill border border-border-input px-4 text-sm">
+                {store}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p className="text-xs text-muted">Podemos receber comissão por compras nesses links. Isso nunca muda suas recomendações.</p>
+      </section>
       <form action={deleteProductAction}>
         <input type="hidden" name="productId" value={product.id} />
         <Button variant="ghost" className="text-danger">Remover do armário</Button>

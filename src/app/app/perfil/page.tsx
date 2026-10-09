@@ -3,13 +3,13 @@ import { PageSkeleton } from "@/components/app/page-skeleton";
 import { Button } from "@/components/ui/button";
 import { Card, Eyebrow } from "@/components/ui/card";
 import { requirePageUser } from "@/lib/auth";
-import { hasFacialConsent } from "@/lib/data";
+import { hasConsent, hasFacialConsent } from "@/lib/data";
 import { portalAction } from "@/app/assinar/actions";
-import { deleteAccountAction, revokeConsentAction, signOutAction } from "./actions";
+import { deleteAccountAction, revokeConsentAction, signOutAction, toggleResearchConsentAction } from "./actions";
 
 async function Profile() {
   const user = await requirePageUser();
-  const consented = await hasFacialConsent(user.id);
+  const [consented, research] = await Promise.all([hasFacialConsent(user.id), hasConsent(user.id, "research_data")]);
   return (
     <div className="space-y-6">
       <Card className="space-y-1">
@@ -29,6 +29,17 @@ async function Profile() {
           {consented ? "Você autorizou a análise das fotos do seu rosto." : "Análise facial desativada. Novas análises pedirão sua autorização."}
         </p>
         {consented && <form action={revokeConsentAction}><Button variant="secondary">Revogar autorização</Button></form>}
+      </Card>
+
+      <Card className="space-y-3">
+        <Eyebrow>Pesquisa (opcional)</Eyebrow>
+        <p className="text-sm text-muted">
+          Compartilhar dados anonimizados e agregados (tipo de pele, métricas, produtos — nunca fotos, nome ou e-mail) para estudos sobre a pele do brasileiro. Você pode desligar quando quiser.
+        </p>
+        <form action={toggleResearchConsentAction}>
+          <input type="hidden" name="enable" value={research ? "0" : "1"} />
+          <Button variant="secondary">{research ? "Parar de compartilhar" : "Quero participar"}</Button>
+        </form>
       </Card>
 
       <Card className="space-y-3">

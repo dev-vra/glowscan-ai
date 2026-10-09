@@ -12,6 +12,7 @@ const schema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   STRIPE_PRICE_MONTHLY: z.string().optional(),
   STRIPE_PRICE_YEARLY: z.string().optional(),
+  AFFILIATE_AMAZON_TAG: z.string().optional(),
   BILLING_BYPASS: z.stringbool().default(false),
 });
 

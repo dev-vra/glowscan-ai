@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { env } from "@/lib/env";
 import { deleteAuthUser, deleteUserPhotos, signedPhotoUrl, supabaseAuth, uploadPhoto } from "@/lib/supabase";
 import type { FaceScan as FaceScanRow, ScanMetric as ScanMetricRow } from "@/generated/prisma/client";
+import type { ConsentKind } from "@/generated/prisma/enums";
 import type { FaceScan, MetricResult, SkinMetric, User } from "./types";
 
 const MAX_IMAGE_BYTES = 3_500_000;
@@ -55,19 +56,23 @@ export async function deleteAccount(userId: string) {
   await deleteAuthUser(userId); // FK com cascade apaga todas as linhas do usuário
 }
 
-export async function hasFacialConsent(userId: string) {
-  const consent = await db().consent.findFirst({ where: { userId, kind: "facial_photo", revokedAt: null } });
+export async function hasConsent(userId: string, kind: ConsentKind) {
+  const consent = await db().consent.findFirst({ where: { userId, kind, revokedAt: null } });
   return consent !== null;
 }
 
-export async function grantFacialConsent(userId: string) {
-  if (await hasFacialConsent(userId)) return;
-  await db().consent.create({ data: { userId, kind: "facial_photo" } });
+export async function grantConsent(userId: string, kind: ConsentKind) {
+  if (await hasConsent(userId, kind)) return;
+  await db().consent.create({ data: { userId, kind } });
 }
 
-export async function revokeFacialConsent(userId: string) {
-  await db().consent.updateMany({ where: { userId, kind: "facial_photo", revokedAt: null }, data: { revokedAt: new Date() } });
+export async function revokeConsent(userId: string, kind: ConsentKind) {
+  await db().consent.updateMany({ where: { userId, kind, revokedAt: null }, data: { revokedAt: new Date() } });
 }
+
+export const hasFacialConsent = (userId: string) => hasConsent(userId, "facial_photo");
+export const grantFacialConsent = (userId: string) => grantConsent(userId, "facial_photo");
+export const revokeFacialConsent = (userId: string) => revokeConsent(userId, "facial_photo");
 
 export async function hasActiveSubscription(userId: string) {
   // Atalho só para desenvolvimento local sem Stripe; ignorado em produção.

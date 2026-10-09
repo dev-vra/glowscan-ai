@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ArrowLeft } from "lucide-react";
 import { PageSkeleton } from "@/components/app/page-skeleton";
+import { ShareCardButton } from "@/components/app/share-card-button";
 import { buttonClasses } from "@/components/ui/button";
 import { Card, Eyebrow } from "@/components/ui/card";
 import { Disclaimer } from "@/components/ui/disclaimer";
@@ -49,6 +50,10 @@ async function ScanResult({ params }: { params: Promise<{ id: string }> }) {
         <p className="text-center text-sm text-muted">
           {scoreDelta >= 0 ? "+" : ""}{scoreDelta} pontos desde a análise anterior
         </p>
+      )}
+
+      {scan.overallScore != null && (
+        <div className="flex justify-center"><ShareCardButton cardUrl={`/app/scan/${scan.id}/card`} /></div>
       )}
 
       <Card className="space-y-2">

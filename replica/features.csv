@@ -29,3 +29,12 @@ Sync Apple Health/Google Fit,integrations,could,yes,no,skip no MVP web
 Depth sensor volume,scan,skip,yes,no,irrelevante p/ skincare
 Base de alimentos,data,skip,yes,no,fora do domínio
 Diagnóstico dermatológico,scan,skip,n/a,no,ato médico — proibido
+Resultado parcial grátis no 1º scan,billing,must,no
+Cancelamento 1 toque + aviso fim do trial,billing,must,no
+Guia de luz em tempo real e retry gentil,scan,must,no
+Scan com 2 fotos e faixa de confiança,scan,should,no
+Mover passo esquecido + ciclos longos,engine,should,no
+Evolução por produto,journal,should,no
+Card compartilhável de resultado/30 dias,engagement,must,no
+Consentimento opcional de pesquisa (research_data),privacy,must,no
+Links de afiliado + selo Patrocinado,products,should,no

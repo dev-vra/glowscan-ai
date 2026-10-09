@@ -21,6 +21,7 @@ enum SkinType {
 enum ConsentKind {
   facial_photo
   marketing
+  research_data
 }
 
 enum ScanStatus {
