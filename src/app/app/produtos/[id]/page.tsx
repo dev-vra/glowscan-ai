@@ -6,10 +6,11 @@ import { CATEGORY_LABELS, formatDays } from "@/components/app/labels";
 import { PageSkeleton } from "@/components/app/page-skeleton";
 import { Button } from "@/components/ui/button";
 import { Card, Eyebrow } from "@/components/ui/card";
-import { IngredientChip } from "@/components/ui/chip";
+import { Badge, IngredientChip } from "@/components/ui/chip";
 import { ConflictAlert } from "@/components/ui/conflict-alert";
 import { buyLinks } from "@/lib/affiliate";
 import { requirePageUser } from "@/lib/auth";
+import { isEnabled } from "@/lib/flags";
 import { getProduct, getRoutinePlan } from "@/lib/data/products";
 import type { IngredientFamily } from "@/generated/prisma/enums";
 import { deleteProductAction } from "../actions";
@@ -77,7 +78,10 @@ async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
       )}
 
       <Card className="space-y-3">
-        <Eyebrow>Quando acabar</Eyebrow>
+        <div className="flex items-center justify-between">
+          <Eyebrow>Quando acabar</Eyebrow>
+          {isEnabled("sponsoredSlots") && <Badge tone="sponsored">Patrocinado</Badge>}
+        </div>
         <ul className="space-y-2">
           {buyLinks(product.brand, product.name).map(({ store, url }) => (
             <li key={store}>

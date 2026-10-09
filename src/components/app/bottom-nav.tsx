@@ -25,7 +25,7 @@ export function BottomNav() {
     </Link>
   );
   return (
-    <nav aria-label="Principal" className="fixed inset-x-0 bottom-0 z-10 border-t border-border bg-bg pb-[env(safe-area-inset-bottom)]">
+    <nav aria-label="Principal" className="fixed inset-x-0 bottom-0 z-10 border-t border-border bg-bg pb-[env(safe-area-inset-bottom)] lg:hidden">
       <div className="mx-auto flex h-16 max-w-content items-center px-2">
         {ITEMS.slice(0, 2).map(renderItem)}
         <Link

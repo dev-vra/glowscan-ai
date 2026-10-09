@@ -1,12 +1,15 @@
+import Link from "next/link";
 import { clsx } from "clsx";
 
-type MetricBarProps = { label: string; score: number | null; delta?: number | null; focus?: boolean; index?: number };
+type MetricBarProps = { label: string; score: number | null; delta?: number | null; focus?: boolean; index?: number; href?: string };
 
 // Linha: rótulo | barra 8px | valor + delta. Delta sempre seta + número (nunca só cor). Métrica mais baixa = foco.
-export function MetricBar({ label, score, delta, focus = false, index = 0 }: MetricBarProps) {
+export function MetricBar({ label, score, delta, focus = false, index = 0, href }: MetricBarProps) {
   const loading = score === null;
+  const rowClass = "grid h-12 grid-cols-[104px_1fr_64px] items-center gap-3 border-b border-[#F1E7DE] last:border-b-0";
+  const Row = href ? Link : "div";
   return (
-    <div className="grid h-12 grid-cols-[104px_1fr_64px] items-center gap-3 border-b border-[#F1E7DE] last:border-b-0">
+    <Row href={href!} className={clsx(rowClass, href && "press")}>
       <span className={clsx("text-[15px]", focus ? "font-bold" : "font-medium")}>{label}</span>
       <div
         className="h-2 overflow-hidden rounded-[4px] bg-[#F1E7DE]"
@@ -28,7 +31,7 @@ export function MetricBar({ label, score, delta, focus = false, index = 0 }: Met
           </>
         )}
       </span>
-    </div>
+    </Row>
   );
 }
 

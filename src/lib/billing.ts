@@ -132,3 +132,20 @@ export async function getPlanPrices() {
     trialDays: TRIAL_DAYS,
   };
 }
+
+const TRIAL_WARNING_DAYS = 2;
+const DAY_MS = 86_400_000;
+
+export type BillingBanner = { kind: "trial_ending"; daysLeft: number } | { kind: "payment_failed" } | null;
+
+// Aviso no topo de Hoje: teste acabando (≤ 2 dias) ou cobrança recusada.
+export async function getBillingBanner(userId: string, now = new Date()): Promise<BillingBanner> {
+  const sub = await db().subscription.findUnique({ where: { userId } });
+  if (!sub) return null;
+  if (sub.status === "past_due") return { kind: "payment_failed" };
+  if (sub.status === "trialing" && sub.currentPeriodEnd) {
+    const daysLeft = Math.ceil((sub.currentPeriodEnd.getTime() - now.getTime()) / DAY_MS);
+    if (daysLeft >= 0 && daysLeft <= TRIAL_WARNING_DAYS) return { kind: "trial_ending", daysLeft };
+  }
+  return null;
+}

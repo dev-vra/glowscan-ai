@@ -14,6 +14,7 @@ const schema = z.object({
   STRIPE_PRICE_YEARLY: z.string().optional(),
   AFFILIATE_AMAZON_TAG: z.string().optional(),
   BILLING_BYPASS: z.stringbool().default(false),
+  FEATURE_FLAGS: z.string().default(""), // lista separada por vírgula: sponsoredSlots,studyInvites,researchConsent
 });
 
 let cached: z.infer<typeof schema> | undefined;

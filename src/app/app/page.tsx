@@ -2,13 +2,17 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { ChevronRight, Flame, Plus, ScanFace } from "lucide-react";
+import { BillingBanner } from "@/components/app/billing-banner";
 import { PageSkeleton } from "@/components/app/page-skeleton";
 import { RoutineChecklist } from "@/components/app/routine-checklist";
+import { StudyInvite } from "@/components/app/study-invite";
 import { Button, buttonClasses } from "@/components/ui/button";
 import { Card, Eyebrow } from "@/components/ui/card";
 import { Badge } from "@/components/ui/chip";
 import { ScoreRing } from "@/components/ui/score-ring";
 import { requireSubscriber } from "@/lib/auth";
+import { getBillingBanner } from "@/lib/billing";
+import { isEnabled } from "@/lib/flags";
 import { TODAY_COPY } from "@/lib/copy";
 import { listFaceScans } from "@/lib/data";
 import { getStreak, getTodayChecklist } from "@/lib/data/daily";
@@ -75,8 +79,8 @@ function CheckInForm() {
 
 async function Today() {
   const user = await requireSubscriber();
-  const [profile, scans, today, streak] = await Promise.all([
-    getSkinProfile(user.id), listFaceScans(user.id), getTodayChecklist(user.id), getStreak(user.id),
+  const [profile, scans, today, streak, banner] = await Promise.all([
+    getSkinProfile(user.id), listFaceScans(user.id), getTodayChecklist(user.id), getStreak(user.id), getBillingBanner(user.id),
   ]);
   if (!profile) redirect("/onboarding");
 
@@ -93,77 +97,94 @@ async function Today() {
   const currentDone = current.steps.length > 0 && current.steps.every((s) => s.done);
   const greeting = TODAY_COPY.greeting(hour, "").replace(/, $/, "");
 
+  const scoreCard = latest ? (
+    <Link href={`/app/scan/${latest.id}`} className="press flex items-center gap-4 rounded-[24px] bg-surface-raised p-4">
+      <ScoreRing score={latest.overallScore} size="sm" animate={false} />
+      <span className="min-w-0 flex-1 space-y-1">
+        <span className="block font-bold">Skin Score</span>
+        {delta !== null && (
+          <span className={delta >= 0 ? "block text-sm font-semibold text-success" : "block text-sm font-semibold text-danger"}>
+            {delta >= 0 ? "▲" : "▼"} {Math.abs(delta)} pontos
+          </span>
+        )}
+        <span className="block text-sm text-muted">{TODAY_COPY.nextScan(daysToNextScan)}</span>
+      </span>
+      <ChevronRight className="size-5 text-muted" aria-hidden />
+    </Link>
+  ) : (
+    <Card className="space-y-4 p-6">
+      <div className="grid size-12 place-items-center rounded-pill bg-accent-soft text-accent"><ScanFace className="size-6" strokeWidth={2} aria-hidden /></div>
+      <div className="space-y-1">
+        <h2 className="font-display text-xl">{TODAY_COPY.firstTitle}</h2>
+        <p className="text-muted">{TODAY_COPY.firstBody}</p>
+      </div>
+      <Link href="/app/scan/rosto" className={buttonClasses("primary", "lg")}>{TODAY_COPY.firstCta}</Link>
+    </Card>
+  );
+
+  const routine = hasRoutine ? (
+    <>
+      <RoutineChecklist key={current.period} period={current.period} steps={current.steps} />
+      {other.steps.length > 0 && <RoutineChecklist key={other.period} period={other.period} steps={other.steps} collapsed />}
+    </>
+  ) : (
+    <Card className="flex items-center gap-4">
+      <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-[#F1E7DE] font-display text-muted dark:bg-surface">2</span>
+      <span className="min-w-0 flex-1">
+        <span className="block font-bold">Monte sua rotina</span>
+        <span className="text-sm text-muted">Fotografe os rótulos do seu armário.</span>
+      </span>
+      <Link href="/app/produtos/novo" aria-label="Adicionar produto" className={buttonClasses("secondary", "sm", "w-11 px-0")}>
+        <Plus className="size-5" aria-hidden />
+      </Link>
+    </Card>
+  );
+
+  const streakCard = currentDone && streak > 0 && (
+    <div className="rise rounded-[28px] bg-accent p-6 text-on-accent">
+      <p className="font-display text-[44px] font-extrabold leading-none tracking-[-0.035em]">
+        <span className="streak-digit">{streak}</span>
+      </p>
+      <p className="mt-1 text-lg font-bold">{TODAY_COPY.streakLong(streak).replace(/^\d+ /, "")}</p>
+    </div>
+  );
+
+  const checkIn = today.checkIn ? (
+    <p className="py-2 text-center text-sm text-muted">
+      Check-in de hoje: {TODAY_COPY.feelings[today.checkIn.feeling - 1].toLowerCase()}.
+    </p>
+  ) : (
+    (currentDone || !hasRoutine) && (
+      <Card>
+        <Eyebrow className="mb-2">Check-in</Eyebrow>
+        <CheckInForm />
+      </Card>
+    )
+  );
+
+  // Celular: uma coluna na ordem de leitura. Desktop: score | rotina (as colunas viram "contents" no celular).
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 lg:relative lg:left-1/2 lg:w-[min(1040px,calc(100vw-320px))] lg:-translate-x-1/2">
       <header className="flex items-center justify-between pb-2">
-        <h1 className="font-display text-[28px] font-bold tracking-[-0.02em]">{greeting}</h1>
+        <h1 className="font-display text-[28px]">{greeting}</h1>
         {streak > 0 && <Badge tone="streak"><Flame className="size-4" aria-hidden /> {TODAY_COPY.streak(streak)}</Badge>}
       </header>
 
-      {latest ? (
-        <Link href={`/app/scan/${latest.id}`} className="press flex items-center gap-4 rounded-[24px] bg-surface-raised p-4">
-          <ScoreRing score={latest.overallScore} size="sm" animate={false} />
-          <span className="min-w-0 flex-1 space-y-1">
-            <span className="block font-bold">Skin Score</span>
-            {delta !== null && (
-              <span className={delta >= 0 ? "block text-sm font-semibold text-success" : "block text-sm font-semibold text-danger"}>
-                {delta >= 0 ? "▲" : "▼"} {Math.abs(delta)} pontos
-              </span>
-            )}
-            <span className="block text-sm text-muted">{TODAY_COPY.nextScan(daysToNextScan)}</span>
-          </span>
-          <ChevronRight className="size-5 text-muted" aria-hidden />
-        </Link>
-      ) : (
-        <Card className="space-y-4 p-6">
-          <div className="grid size-12 place-items-center rounded-pill bg-accent-soft text-accent"><ScanFace className="size-6" strokeWidth={2} aria-hidden /></div>
-          <div className="space-y-1">
-            <h2 className="font-display text-xl font-bold tracking-[-0.02em]">{TODAY_COPY.firstTitle}</h2>
-            <p className="text-muted">{TODAY_COPY.firstBody}</p>
-          </div>
-          <Link href="/app/scan/rosto" className={buttonClasses("primary", "lg")}>{TODAY_COPY.firstCta}</Link>
-        </Card>
-      )}
-
-      {hasRoutine ? (
-        <>
-          <RoutineChecklist key={current.period} period={current.period} steps={current.steps} />
-          {other.steps.length > 0 && <RoutineChecklist key={other.period} period={other.period} steps={other.steps} collapsed />}
-        </>
-      ) : (
-        <Card className="flex items-center gap-4">
-          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-[#F1E7DE] font-display font-bold text-muted dark:bg-surface">2</span>
-          <span className="min-w-0 flex-1">
-            <span className="block font-bold">Monte sua rotina</span>
-            <span className="text-sm text-muted">Fotografe os rótulos do seu armário.</span>
-          </span>
-          <Link href="/app/produtos/novo" aria-label="Adicionar produto" className={buttonClasses("secondary", "sm", "w-11 px-0")}>
-            <Plus className="size-5" aria-hidden />
-          </Link>
-        </Card>
-      )}
-
-      {currentDone && streak > 0 && (
-        <div className="rise rounded-[28px] bg-accent p-6 text-on-accent">
-          <p className="font-display text-[44px] font-extrabold leading-none tracking-[-0.035em]">
-            <span className="streak-digit">{streak}</span>
+      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
+        <div className="contents lg:flex lg:flex-col lg:gap-4">
+          {banner && <div className="order-1 lg:order-none"><BillingBanner banner={banner} /></div>}
+          <div className="order-2 lg:order-none">{scoreCard}</div>
+          {streakCard && <div className="order-4 lg:order-none">{streakCard}</div>}
+          {isEnabled("studyInvites") && latest && <div className="order-5 lg:order-none"><StudyInvite /></div>}
+          <p className="hidden rounded-[24px] bg-surface p-5 text-sm text-muted lg:block">
+            A análise é melhor no celular, com a câmera frontal e luz de janela. Abra o Viço no seu telefone.
           </p>
-          <p className="mt-1 text-lg font-bold">{TODAY_COPY.streakLong(streak).replace(/^\d+ /, "")}</p>
         </div>
-      )}
-
-      {today.checkIn ? (
-        <p className="py-2 text-center text-sm text-muted">
-          Check-in de hoje: {TODAY_COPY.feelings[today.checkIn.feeling - 1].toLowerCase()}.
-        </p>
-      ) : (
-        (currentDone || !hasRoutine) && (
-          <Card>
-            <Eyebrow className="mb-2">Check-in</Eyebrow>
-            <CheckInForm />
-          </Card>
-        )
-      )}
+        <div className="contents lg:flex lg:flex-col lg:gap-4">
+          <div className="order-3 flex flex-col gap-4 lg:order-none">{routine}</div>
+          {checkIn && <div className="order-6 lg:order-none">{checkIn}</div>}
+        </div>
+      </div>
     </div>
   );
 }

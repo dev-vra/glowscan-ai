@@ -6,6 +6,7 @@ import { Eyebrow } from "@/components/ui/card";
 import { requirePageUser } from "@/lib/auth";
 import { hasConsent, hasFacialConsent } from "@/lib/data";
 import { getAccountSummary, getSkinProfile } from "@/lib/data/profile";
+import { isEnabled } from "@/lib/flags";
 import { portalAction } from "@/app/assinar/actions";
 import type { SkinType } from "@/generated/prisma/enums";
 import {
@@ -98,9 +99,11 @@ async function Profile() {
             <form action={revokeConsentAction}><Button variant="secondary" size="sm">Revogar</Button></form>
           )}
         </Row>
-        <Row label="Pesquisa anônima" hint="Dados agregados, nunca fotos, nome ou e-mail.">
-          <Toggle action={toggleResearchConsentAction} on={research} label="Participar da pesquisa anônima" />
-        </Row>
+        {isEnabled("researchConsent") && (
+          <Row label="Pesquisa anônima" hint="Dados agregados, nunca fotos, nome ou e-mail.">
+            <Toggle action={toggleResearchConsentAction} on={research} label="Participar da pesquisa anônima" />
+          </Row>
+        )}
         <Row label="Fotos guardadas" hint={`${photoCount} ${photoCount === 1 ? "foto" : "fotos"} em armazenamento privado`}>
           <Lock className="size-5 text-muted" aria-hidden />
         </Row>

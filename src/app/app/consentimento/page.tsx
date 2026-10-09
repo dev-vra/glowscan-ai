@@ -4,6 +4,7 @@ import { PageSkeleton } from "@/components/app/page-skeleton";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { requirePageUser } from "@/lib/auth";
+import { isEnabled } from "@/lib/flags";
 import { grantConsentAction } from "./actions";
 
 const COMMITMENTS = [
@@ -51,7 +52,9 @@ export default function ConsentPage() {
       <Suspense fallback={<PageSkeleton />}>
         <ConsentForm />
       </Suspense>
-      <p className="text-sm text-muted">A pesquisa anônima é opcional e fica em Perfil, desligada por padrão.</p>
+      {isEnabled("researchConsent") && (
+        <p className="text-sm text-muted">A pesquisa anônima é opcional e fica em Perfil, desligada por padrão.</p>
+      )}
     </div>
   );
 }

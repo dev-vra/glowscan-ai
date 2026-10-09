@@ -103,6 +103,7 @@ async function ScanResult({ params }: { params: Promise<{ id: string }> }) {
             <MetricBar
               key={m.metric} index={i} label={METRIC_LABELS[m.metric]} score={m.score}
               delta={before == null ? null : m.score - before} focus={m.metric === focus?.metric}
+              href={`/app/scan/${scan.id}/metrica/${m.metric}`}
             />
           );
         })}
