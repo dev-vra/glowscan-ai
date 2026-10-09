@@ -128,8 +128,8 @@ export default function HowToPage() {
   return (
     <SiteShell>
       <PageHero eyebrow="Manual de uso" title="Do download à primeira evolução" intro="Onze passos curtos. Leva uns 5 minutos para começar e 1 minuto por dia depois." />
-      <div className="mx-auto grid max-w-wide gap-10 px-5 lg:grid-cols-[240px_1fr]">
-        <nav aria-label="Passos" className="lg:sticky lg:top-24 lg:self-start">
+      <div className="mx-auto grid max-w-wide grid-cols-1 gap-10 px-5 lg:grid-cols-[240px_1fr]">
+        <nav aria-label="Passos" className="min-w-0 lg:sticky lg:top-24 lg:self-start">
           <ol className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible">
             {STEPS.map((s, i) => (
               <li key={s.id} className="shrink-0">
@@ -140,7 +140,7 @@ export default function HowToPage() {
             ))}
           </ol>
         </nav>
-        <div className="max-w-3xl space-y-4">
+        <div className="min-w-0 max-w-3xl space-y-4">
           {STEPS.map((s, i) => (
             <section key={s.id} id={s.id} className="scroll-mt-24 rounded-[24px] bg-surface-raised p-6">
               <div className="flex gap-4">
