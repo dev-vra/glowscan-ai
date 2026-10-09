@@ -7,7 +7,7 @@ import { googleSignInAction, passwordSignInAction, signInAction, type SignInStat
 
 const initialState: SignInState = { error: null, sentTo: null };
 
-export function SignInForm() {
+export function SignInForm({ showGoogle = true }: { showGoogle?: boolean }) {
   const [state, formAction, pending] = useActionState(signInAction, initialState);
   const [pwState, pwAction, pwPending] = useActionState(passwordSignInAction, initialState);
 
@@ -47,9 +47,9 @@ export function SignInForm() {
           <Button type="submit" variant="dark" size="lg" loading={pwPending}>Entrar</Button>
         </form>
       </details>
-      <form action={googleSignInAction}>
+      {showGoogle && <form action={googleSignInAction}>
         <Button type="submit" variant="secondary" size="lg">Continuar com Google</Button>
-      </form>
+      </form>}
     </div>
   );
 }

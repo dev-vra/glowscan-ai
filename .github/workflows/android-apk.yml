@@ -1,0 +1,34 @@
+name: Android APK (beta)
+
+# Gera o APK do beta a cada push na main que mexe no app nativo, ou manualmente.
+on:
+  workflow_dispatch:
+    inputs:
+      server_url:
+        description: "URL do site que o app abre"
+        required: false
+  push:
+    branches: [main]
+    paths: ["android/**", "capacitor.config.ts", "capacitor/**", ".github/workflows/android-apk.yml"]
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    env:
+      CAP_SERVER_URL: ${{ inputs.server_url || vars.CAP_SERVER_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21, cache: gradle }
+      - run: npm ci --ignore-scripts
+      - run: npx cap sync android
+      - run: ./gradlew assembleDebug
+        working-directory: android
+      - run: mv android/app/build/outputs/apk/debug/app-debug.apk vico-beta-${{ github.run_number }}.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vico-beta-apk
+          path: vico-beta-*.apk
+          retention-days: 30

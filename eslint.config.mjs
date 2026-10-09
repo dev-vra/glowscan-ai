@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Referências de design (HTML/JS de terceiros, não é código do app).
     "replica/**",
+    "android/**",
+    "ios/**",
   ]),
 ]);
 
