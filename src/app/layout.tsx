@@ -1,30 +1,35 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { Bricolage_Grotesque, Figtree } from "next/font/google";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin"],
-  weight: ["500", "600"],
+  axes: ["opsz"],
 });
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "GlowScan AI",
-  description: "Seu sommelier de skincare: análise da pele, rotina na ordem certa e evolução em gráficos.",
+  title: "Viço",
+  description: "Sua pele lida, sua rotina na ordem certa.",
+  manifest: "/manifest.webmanifest",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FBF8F4",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FFFBF8" },
+    { media: "(prefers-color-scheme: dark)", color: "#1A1310" },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${cormorant.variable} ${manrope.variable} h-full antialiased`}>
+    <html lang="pt-BR" className={`${bricolage.variable} ${figtree.variable} h-full antialiased`}>
       <body className="min-h-full bg-bg text-text">{children}</body>
     </html>
   );

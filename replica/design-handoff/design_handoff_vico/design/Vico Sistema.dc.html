@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F7F3EF;-webkit-font-smoothing:antialiased}a{color:#B8462F}a:hover{color:#2A1B14}</style>
+</helmet>
+<div style="padding:72px;display:flex;flex-direction:column;gap:80px;font-family:Figtree,sans-serif;color:#2A1B14;min-width:1900px">
+<header style="display:flex;flex-direction:column;gap:8px"><span style="font:600 13px 'JetBrains Mono';letter-spacing:.08em;text-transform:uppercase;color:#6E5C51">Viço · sistema · v1 · 9 out 2026</span><h1 style="margin:0;font:800 60px/1 'Bricolage Grotesque';letter-spacing:-0.035em">Componentes, dark e loja</h1><p style="margin:0;font-size:18px;color:#6E5C51">Telas em <a href="Viço App.dc.html">Viço App</a>. Nomes de componente batem com <code>src/components/ui</code>.</p></header>
+
+<section data-screen-label="01 Componentes" style="display:flex;flex-direction:column;gap:28px">
+<h2 style="margin:0;font:700 34px/1 'Bricolage Grotesque';letter-spacing:-0.02em">01 · Componentes</h2>
+<div style="display:grid;grid-template-columns:repeat(3,580px);gap:24px">
+
+<div style="background:#FFFFFF;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:20px"><div style="display:flex;justify-content:space-between"><b style="font:700 20px 'Bricolage Grotesque'">ScoreRing</b><span style="font:500 12px 'JetBrains Mono';color:#6E5C51">score-ring.tsx</span></div>
+<div style="display:flex;align-items:flex-end;gap:28px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:184px;height:184px;border-radius:50%;background:conic-gradient(#B8462F 0 72%,#EFE5DC 72% 100%);display:grid;place-items:center"><div style="width:158px;height:158px;border-radius:50%;background:#FFFFFF;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font:800 76px/0.9 'Bricolage Grotesque';letter-spacing:-0.05em">72</span><span style="font:600 13px Figtree;color:#6E5C51">de 100</span></div></div><span style="font:500 12px 'JetBrains Mono';color:#6E5C51">lg · 184</span></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:72px;height:72px;border-radius:50%;background:conic-gradient(#B8462F 0 72%,#EFE5DC 72% 100%);display:grid;place-items:center"><div style="width:58px;height:58px;border-radius:50%;background:#FFFFFF;display:grid;place-items:center;font:800 26px 'Bricolage Grotesque'">72</div></div><span style="font:500 12px 'JetBrains Mono';color:#6E5C51">sm · 72</span></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:72px;height:72px;border-radius:50%;background:#F1E7DE;display:grid;place-items:center"><div style="width:58px;height:58px;border-radius:50%;background:#FFFFFF;display:grid;place-items:center;font:800 26px 'Bricolage Grotesque';color:#C9B6A8">–</div></div><span style="font:500 12px 'JetBrains Mono';color:#6E5C51">vazio</span></div></div>
+<span style="font-size:14px;line-height:1.5;color:#6E5C51">Anel sempre terracota; nunca vermelho/verde pelo score — a nota não é bronca. Variação vai no selo ▲▼ ao lado.</span></div>
+
+<div style="background:#FFFFFF;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:14px"><div style="display:flex;justify-content:space-between"><b style="font:700 20px 'Bricolage Grotesque'">MetricBar</b><span style="font:500 12px 'JetBrains Mono';color:#6E5C51">metric-bar.tsx</span></div>
+<div style="display:flex;flex-direction:column;font-size:15px">
+<div style="min-height:48px;display:grid;grid-template-columns:110px 1fr 70px;align-items:center;gap:12px;border-bottom:1px solid #F1E7DE"><span>Textura</span><span style="height:8px;border-radius:4px;background:linear-gradient(90deg,#B8462F 78%,#EFE5DC 78%)"></span><span style="text-align:right;font:700 16px 'Bricolage Grotesque'">78 <small style="font:600 12px Figtree;color:#1F6B45">▲5</small></span></div>
+<div style="min-height:48px;display:grid;grid-template-columns:110px 1fr 70px;align-items:center;gap:12px;border-bottom:1px solid #F1E7DE"><span>Poros</span><span style="height:8px;border-radius:4px;background:linear-gradient(90deg,#B8462F 66%,#EFE5DC 66%)"></span><span style="text-align:right;font:700 16px 'Bricolage Grotesque'">66 <small style="font:600 12px Figtree;color:#A3271B">▼1</small></span></div>
+<div style="min-height:48px;display:grid;grid-template-columns:110px 1fr 70px;align-items:center;gap:12px;border-bottom:1px solid #F1E7DE"><b>Oleosidade</b><span style="height:8px;border-radius:4px;background:linear-gradient(90deg,#D98A2B 54%,#EFE5DC 54%)"></span><span style="text-align:right;font:700 16px 'Bricolage Grotesque'">54 <small style="font:600 12px Figtree;color:#6E5C51">foco</small></span></div>
+<div style="min-height:48px;display:grid;grid-template-columns:110px 1fr 70px;align-items:center;gap:12px"><span style="color:#6E5C51">Hidratação</span><span style="height:8px;border-radius:4px;background:#F1E7DE"></span><span style="text-align:right;font:600 13px Figtree;color:#6E5C51">lendo…</span></div></div>
+<span style="font-size:14px;line-height:1.5;color:#6E5C51">Estados: normal · piorou · foco (a mais baixa, em âmbar + negrito) · carregando. Seta + número, nunca só cor.</span></div>
+
+<div style="background:#FFFFFF;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:16px"><b style="font:700 20px 'Bricolage Grotesque'">Chips</b>
+<span style="font:600 13px Figtree;color:#6E5C51">Ingrediente (nome INCI + tradução)</span>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<span style="min-height:36px;padding:0 12px;border-radius:99px;background:#FBEDD6;display:flex;align-items:center;gap:6px;font:600 14px Figtree">Ácido ascórbico <small style="font-weight:500;color:#6E5C51">vitamina C</small></span>
+<span style="min-height:36px;padding:0 12px;border-radius:99px;background:#F9E6DE;display:flex;align-items:center;gap:6px;font:600 14px Figtree">Retinol <small style="font-weight:500;color:#6E5C51">vitamina A</small></span>
+<span style="min-height:36px;padding:0 12px;border-radius:99px;background:#F1E7DE;display:flex;align-items:center;gap:6px;font:600 14px Figtree">Niacinamida <small style="font-weight:500;color:#6E5C51">vitamina B3</small></span>
+<span style="min-height:36px;padding:0 12px;border-radius:99px;background:#FDE7E3;border:1.5px solid #F4B8AE;display:flex;align-items:center;gap:6px;font:600 14px Figtree;color:#A3271B">⚠ Ácido salicílico <small style="font-weight:500">gestação</small></span></div>
+<span style="font:600 13px Figtree;color:#6E5C51">Filtro / seleção · 44px de alvo</span>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<span style="min-height:44px;padding:0 16px;border-radius:99px;background:#2A1B14;color:#FFFFFF;display:flex;align-items:center;font:600 15px Figtree">✓ Selecionado</span>
+<span style="min-height:44px;padding:0 16px;border-radius:99px;border:1.5px solid #E2D5CA;display:flex;align-items:center;font:600 15px Figtree">Padrão</span>
+<span style="min-height:44px;padding:0 16px;border-radius:99px;border:1.5px solid #E2D5CA;display:flex;align-items:center;font:600 15px Figtree;color:#B5A79C">Desativado</span></div>
+<span style="font:600 13px Figtree;color:#6E5C51">Selos</span>
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+<span style="font:700 11px Figtree;letter-spacing:.04em;padding:4px 8px;border-radius:6px;background:#2A1B14;color:#FFFFFF">PATROCINADO</span>
+<span style="font:700 13px Figtree;padding:5px 10px;border-radius:99px;background:#E1F1E7;color:#1F6B45">▲ 4</span>
+<span style="font:700 13px Figtree;padding:5px 10px;border-radius:99px;background:#FBEDD6;color:#7A4A00">● 12 dias</span>
+<span style="font:700 13px Figtree;padding:5px 10px;border-radius:99px;background:#E3F0F8;color:#1F5F86">Estudo · convite</span></div></div>
+
+<div style="grid-column:span 2;background:#FFFFFF;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:16px"><div style="display:flex;justify-content:space-between"><b style="font:700 20px 'Bricolage Grotesque'">ConflictAlert · 3 níveis + resolvido</b><span style="font:500 12px 'JetBrains Mono';color:#6E5C51">rotina/page.tsx · Finding</span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div style="background:#FDE7E3;border:1.5px solid #F4B8AE;border-radius:18px;padding:16px;display:flex;gap:12px;color:#4D140D"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A3271B" stroke-width="2.4" stroke-linecap="round" style="flex:none"><path d="M7.9 2h8.2L22 7.9v8.2L16.1 22H7.9L2 16.1V7.9z"></path><path d="M12 8v4M12 16h.01"></path></svg><div style="display:flex;flex-direction:column;gap:4px;font-size:15px;line-height:1.4"><b style="color:#A3271B">Importante</b><span>Retinol + peróxido de benzoíla não vão juntos. Um desativa o outro.</span><b style="color:#A3271B;font-size:14px;margin-top:4px">Ver sugestão ›</b></div></div>
+<div style="background:#FDF0D2;border:1.5px solid #EBC67A;border-radius:18px;padding:16px;display:flex;gap:12px;color:#4A2E00"><b style="width:24px;height:24px;flex:none;border-radius:50%;background:#7A4A00;color:#FFFFFF;display:grid;place-items:center;font-size:14px">!</b><div style="display:flex;flex-direction:column;gap:4px;font-size:15px;line-height:1.4"><b style="color:#7A4A00">Atenção</b><span>Retinol deixa a pele sensível ao sol. Protetor amanhã cedo.</span></div></div>
+<div style="background:#E3F0F8;border:1.5px solid #A9CDE3;border-radius:18px;padding:16px;display:flex;gap:12px;color:#1F3B4D"><b style="width:24px;height:24px;flex:none;border-radius:50%;background:#1F5F86;color:#FFFFFF;display:grid;place-items:center;font:700 14px Georgia">i</b><div style="display:flex;flex-direction:column;gap:4px;font-size:15px;line-height:1.4"><b style="color:#1F5F86">Dica</b><span>Niacinamida combina com quase tudo.</span></div></div>
+<div style="background:#E1F1E7;border:1.5px solid #A8D4B9;border-radius:18px;padding:16px;display:flex;gap:12px;color:#173D29"><b style="width:24px;height:24px;flex:none;border-radius:50%;background:#1F6B45;color:#FFFFFF;display:grid;place-items:center;font-size:13px">✓</b><div style="display:flex;flex-direction:column;gap:4px;font-size:15px;line-height:1.4"><b style="color:#1F6B45">Resolvido na agenda</b><span>Separamos retinol (seg/qua/sex) e ácido (ter/sáb).</span></div></div></div>
+<span style="font-size:14px;color:#6E5C51">Forma do ícone muda por nível (octógono / círculo ! / i / ✓). Texto escuro sobre fundo claro: todos ≥ 7:1. Rótulo "Importante" segue SEVERITY_LABELS do código.</span></div>
+
+<div style="background:#FFFFFF;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:14px"><div style="display:flex;justify-content:space-between"><b style="font:700 20px 'Bricolage Grotesque'">RoutineStep</b><span style="font:500 12px 'JetBrains Mono';color:#6E5C51">routine-checklist.tsx</span></div>
+<div style="min-height:56px;display:flex;align-items:center;gap:14px;border-bottom:1px solid #F1E7DE"><span style="width:28px;height:28px;flex:none;border-radius:50%;border:2px solid #8F8176;box-sizing:border-box"></span><div style="display:flex;flex-direction:column"><span style="font:600 15px Figtree">A fazer</span><span style="font-size:13px;color:#6E5C51">Marca · frequência</span></div></div>
+<div style="min-height:56px;display:flex;align-items:center;gap:14px;border-bottom:1px solid #F1E7DE"><span style="width:28px;height:28px;flex:none;border-radius:50%;background:#B8462F;color:#FFFFFF;display:grid;place-items:center;font-size:15px">✓</span><div style="display:flex;flex-direction:column;color:#6E5C51;text-decoration:line-through"><span style="font:600 15px Figtree">Feito</span><span style="font-size:13px">Marca</span></div></div>
+<div style="min-height:56px;display:flex;align-items:center;gap:14px;border-bottom:1px solid #F1E7DE"><b style="font:700 20px 'Bricolage Grotesque';color:#B8462F;width:28px;text-align:center">2</b><div style="display:flex;flex-direction:column"><span style="font:600 15px Figtree">Ordenado (tela Rotina)</span><span style="font-size:13px;color:#6E5C51">seg, qua, sex</span></div></div>
+<div style="min-height:56px;display:flex;align-items:center;gap:14px"><span style="width:28px;height:28px;flex:none;border-radius:50%;border:2px dashed #C9B6A8;box-sizing:border-box"></span><div style="display:flex;flex-direction:column;color:#6E5C51"><span style="font:600 15px Figtree">Folga hoje</span><span style="font-size:13px">volta na sexta</span></div></div></div>
+
+<div style="background:#FFFFFF;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:14px"><b style="font:700 20px 'Bricolage Grotesque'">Button</b>
+<div style="height:56px;border-radius:99px;background:#B8462F;color:#FFFFFF;display:grid;place-items:center;font:700 17px Figtree">Primário · 56</div>
+<div style="height:56px;border-radius:99px;background:#2A1B14;color:#FFFFFF;display:grid;place-items:center;font:700 17px Figtree">Secundário escuro</div>
+<div style="height:56px;border-radius:99px;background:#FFFFFF;border:1.5px solid #E2D5CA;display:grid;place-items:center;font:700 17px Figtree">Contorno</div>
+<div style="display:flex;gap:10px"><div style="flex:1;height:44px;display:grid;place-items:center;font:600 15px Figtree">Ghost · 44</div><div style="flex:1;height:56px;border-radius:99px;background:#4A3A31;color:#BFAEA2;display:grid;place-items:center;font:700 15px Figtree">Bloqueado</div></div>
+<div style="height:56px;border-radius:99px;background:#A3271B;color:#FFFFFF;display:grid;place-items:center;font:700 17px Figtree">Destrutivo</div></div>
+
+<div style="background:#FFFFFF;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:14px"><div style="display:flex;justify-content:space-between"><b style="font:700 20px 'Bricolage Grotesque'">LineChart</b><span style="font:500 12px 'JetBrains Mono';color:#6E5C51">line-chart.tsx</span></div>
+<svg viewBox="0 0 520 170" width="100%" height="170"><path d="M0 40H520M0 85H520M0 130H520" stroke="#F1E7DE"></path><text x="0" y="36" font-family="JetBrains Mono" font-size="11" fill="#6E5C51">80</text><text x="0" y="126" font-family="JetBrains Mono" font-size="11" fill="#6E5C51">60</text><path d="M30 140 L150 122 L270 114 L390 90 L500 58" fill="none" stroke="#B8462F" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M30 120 L150 118 L270 110 L390 106 L500 96" fill="none" stroke="#F2B66D" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"></path><circle cx="500" cy="58" r="7" fill="#FFFFFF" stroke="#B8462F" stroke-width="3.5"></circle><rect x="430" y="18" width="72" height="28" rx="8" fill="#2A1B14"></rect><text x="466" y="37" text-anchor="middle" font-family="Figtree" font-weight="700" font-size="14" fill="#FFFFFF">72</text></svg>
+<div style="display:flex;gap:18px;font-size:13px;color:#6E5C51"><span><b style="color:#B8462F">——</b> Skin Score</span><span><b style="color:#D98A2B">· · ·</b> métrica comparada</span></div>
+<span style="font-size:14px;line-height:1.5;color:#6E5C51">Séries diferem por traço (sólido / pontilhado), não só cor. Último ponto sempre rotulado.</span></div>
+
+<div style="background:#FFFFFF;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:14px"><b style="font:700 20px 'Bricolage Grotesque'">BeforeAfter</b>
+<div style="position:relative;height:240px;border-radius:18px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr"><div style="background:repeating-linear-gradient(135deg,#E3D2C5 0 10px,#DCC9BB 10px 20px)"></div><div style="background:repeating-linear-gradient(135deg,#EADBCF 0 10px,#E3D2C5 10px 20px)"></div><span style="position:absolute;left:12px;top:12px;font:700 12px Figtree;background:#FFFFFF;padding:4px 8px;border-radius:6px">11 set</span><span style="position:absolute;right:12px;top:12px;font:700 12px Figtree;background:#FFFFFF;padding:4px 8px;border-radius:6px">9 out</span><span style="position:absolute;left:50%;top:0;bottom:0;width:3px;margin-left:-1.5px;background:#FFFFFF"></span><span style="position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:#FFFFFF;display:grid;place-items:center;font:700 14px Figtree;box-shadow:0 4px 12px rgba(42,27,20,.2)">⇔</span></div>
+<span style="font-size:14px;line-height:1.5;color:#6E5C51">Datas no topo pra não brigar com o puxador. Arrastar ou setas ← → no teclado. Sem filtro, sem retoque.</span></div>
+
+<div style="background:#FFFFFF;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:14px"><b style="font:700 20px 'Bricolage Grotesque'">CameraFrame · estados</b>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+<div style="height:200px;border-radius:16px;background:#33241D;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px"><span style="width:84px;height:112px;border-radius:50%;border:3px solid #8FD6A8"></span><span style="font:600 12px Figtree;color:#FFFFFF">✓ ok · sólido</span></div>
+<div style="height:200px;border-radius:16px;background:#33241D;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px"><span style="width:84px;height:112px;border-radius:50%;border:3px dashed #F2B66D"></span><span style="font:600 12px Figtree;color:#FFFFFF">! ajuste · tracejado</span></div>
+<div style="height:200px;border-radius:16px;background:#33241D;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px"><span style="width:84px;height:112px;border-radius:50%;border:3px dashed #FFFFFF"></span><span style="font:600 12px Figtree;color:#FFFFFF">fora · branco</span></div></div>
+<span style="font-size:14px;line-height:1.5;color:#6E5C51">Luminância 70–215 (face-camera.tsx). Mensagem por aria-live; vibração curta ao ficar ok.</span></div>
+
+<div style="background:#FFFFFF;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:14px"><b style="font:700 20px 'Bricolage Grotesque'">Escala</b>
+<div style="display:flex;flex-direction:column;gap:8px">
+<span style="font:800 44px/1 'Bricolage Grotesque';letter-spacing:-0.04em">Display 44</span>
+<span style="font:700 28px/1.15 'Bricolage Grotesque';letter-spacing:-0.02em">Título 28</span>
+<span style="font:700 20px 'Bricolage Grotesque'">Seção 20</span>
+<span style="font:500 16px Figtree">Corpo 16 · Figtree</span>
+<span style="font:500 14px Figtree;color:#6E5C51">Apoio 14 · mínimo 12 em legenda</span></div>
+<div style="display:flex;gap:8px;align-items:flex-end;margin-top:6px"><span style="width:4px;height:4px;background:#B8462F"></span><span style="width:8px;height:8px;background:#B8462F"></span><span style="width:12px;height:12px;background:#B8462F"></span><span style="width:16px;height:16px;background:#B8462F"></span><span style="width:24px;height:24px;background:#B8462F"></span><span style="width:32px;height:32px;background:#B8462F"></span><span style="width:48px;height:48px;background:#B8462F"></span><span style="font:500 12px 'JetBrains Mono';color:#6E5C51">4·8·12·16·24·32·48</span></div>
+<div style="display:flex;gap:10px;align-items:center"><span style="width:44px;height:44px;border-radius:14px;background:#F1E7DE"></span><span style="width:44px;height:44px;border-radius:20px;background:#F1E7DE"></span><span style="width:44px;height:44px;border-radius:28px 28px 8px 8px;background:#F1E7DE"></span><span style="font:500 12px 'JetBrains Mono';color:#6E5C51">raio 14 · 20 · 28</span></div></div>
+
+</div></section>
+
+<section data-screen-label="02 Dark" style="display:flex;flex-direction:column;gap:28px">
+<h2 style="margin:0;font:700 34px/1 'Bricolage Grotesque';letter-spacing:-0.02em">02 · Dark <span style="font:500 17px Figtree;color:#6E5C51;letter-spacing:0">marrom quente, não preto — mesma pele à noite. Mesmos nomes de token</span></h2>
+<div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start">
+
+<div style="width:440px;background:#1A1310;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:6px;font:500 13px/1.9 'JetBrains Mono';color:#F6EDE6">
+<b style="font:700 20px 'Bricolage Grotesque';margin-bottom:8px">Tokens dark</b>
+<div style="display:grid;grid-template-columns:28px 1fr;gap:4px 12px;align-items:center">
+<span style="width:24px;height:24px;border-radius:6px;background:#1A1310;border:1px solid #4A3A31"></span>--color-bg #1A1310
+<span style="width:24px;height:24px;border-radius:6px;background:#221915"></span>--color-surface #221915
+<span style="width:24px;height:24px;border-radius:6px;background:#2C211C"></span>--color-surface-raised #2C211C
+<span style="width:24px;height:24px;border-radius:6px;background:#3E3029"></span>--color-border #3E3029
+<span style="width:24px;height:24px;border-radius:6px;background:#F6EDE6"></span>--color-text #F6EDE6
+<span style="width:24px;height:24px;border-radius:6px;background:#BFAEA2"></span>--color-muted #BFAEA2
+<span style="width:24px;height:24px;border-radius:6px;background:#F08A6E"></span>--color-accent #F08A6E
+<span style="width:24px;height:24px;border-radius:6px;background:#3D221A"></span>--color-accent-soft #3D221A
+<span style="width:24px;height:24px;border-radius:6px;background:#1A1310;border:1px solid #4A3A31"></span>--color-on-accent #1A1310
+<span style="width:24px;height:24px;border-radius:6px;background:#FF9C8F"></span>danger #FF9C8F / #3A1714
+<span style="width:24px;height:24px;border-radius:6px;background:#F5C46B"></span>warning #F5C46B / #33240B
+<span style="width:24px;height:24px;border-radius:6px;background:#8CC6EA"></span>info #8CC6EA / #10283A
+<span style="width:24px;height:24px;border-radius:6px;background:#7FD3A2"></span>success #7FD3A2 / #10301F</div>
+<span style="font:500 13px/1.5 Figtree;color:#BFAEA2;margin-top:10px">Botão primário inverte: fundo #F08A6E, texto #1A1310 (7,9:1). Status em texto claro sobre fundo escuro tingido.</span></div>
+
+<div style="display:flex;flex-direction:column;gap:10px"><span style="font:600 13px 'JetBrains Mono';color:#6E5C51">Hoje · dark</span>
+<div style="width:390px;height:844px;border-radius:44px;overflow:hidden;position:relative;background:#1A1310;color:#F6EDE6;box-shadow:0 30px 60px -34px rgba(42,27,20,.6);display:flex;flex-direction:column">
+<div style="height:47px;flex:none;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 6px;font:600 15px Figtree"><span>22:10</span><span>●●● ▮</span></div>
+<div style="padding:16px 20px 0;display:flex;justify-content:space-between;align-items:center"><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;color:#BFAEA2">Quinta, 9 de outubro</span><b style="font:700 26px/1.1 'Bricolage Grotesque';letter-spacing:-0.02em">Boa noite, Ana</b></div><span style="height:36px;padding:0 12px;border-radius:99px;background:#33240B;display:flex;align-items:center;font:700 14px Figtree;color:#F5C46B">● 13 dias</span></div>
+<div style="margin:16px 16px 0;background:#2C211C;border-radius:24px;padding:16px 18px;display:flex;align-items:center;gap:16px">
+<div style="width:72px;height:72px;flex:none;border-radius:50%;background:conic-gradient(#F08A6E 0 72%,#3E3029 72% 100%);display:grid;place-items:center"><div style="width:58px;height:58px;border-radius:50%;background:#2C211C;display:grid;place-items:center;font:800 26px 'Bricolage Grotesque'">72</div></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:2px"><b style="font-size:15px">▲ 4 desde a última</b><span style="font-size:14px;color:#BFAEA2">Próxima análise em 3 dias</span></div></div>
+<div style="margin:12px 16px 0;background:#2C211C;border-radius:24px;padding:16px 18px 8px;display:flex;flex-direction:column">
+<div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:6px"><b style="font:700 20px 'Bricolage Grotesque'">☾ Noite</b><span style="font:700 14px 'JetBrains Mono';color:#BFAEA2">1/3</span></div>
+<div style="min-height:56px;display:flex;align-items:center;gap:14px;border-top:1px solid #3E3029"><span style="width:28px;height:28px;flex:none;border-radius:50%;background:#F08A6E;color:#1A1310;display:grid;place-items:center;font-size:15px">✓</span><div style="display:flex;flex-direction:column;color:#BFAEA2;text-decoration:line-through"><span style="font:600 15px Figtree">Gel de limpeza</span><span style="font-size:13px">CeraVe</span></div></div>
+<div style="min-height:56px;display:flex;align-items:center;gap:14px;border-top:1px solid #3E3029"><span style="width:28px;height:28px;flex:none;border-radius:50%;border:2px solid #8A7C70;box-sizing:border-box"></span><div style="display:flex;flex-direction:column"><span style="font:600 15px Figtree">Retinol 0,3%</span><span style="font-size:13px;color:#BFAEA2">ervilha pro rosto todo</span></div></div>
+<div style="min-height:56px;display:flex;align-items:center;gap:14px;border-top:1px solid #3E3029"><span style="width:28px;height:28px;flex:none;border-radius:50%;border:2px solid #8A7C70;box-sizing:border-box"></span><div style="display:flex;flex-direction:column"><span style="font:600 15px Figtree">Hidratante reparador</span><span style="font-size:13px;color:#BFAEA2">Cicaplast</span></div></div></div>
+<div style="margin:12px 16px 0;background:#33240B;border:1.5px solid #6B4C16;border-radius:18px;padding:14px 16px;font-size:14px;line-height:1.4;color:#F6EDE6"><b style="color:#F5C46B">! Atenção:</b> com retinol hoje, protetor amanhã cedo sem pular.</div>
+<div style="position:absolute;left:0;right:0;bottom:0;height:84px;background:#1A1310;border-top:1px solid #3E3029;display:flex;align-items:flex-start;padding:10px 8px 0;font:600 12px Figtree;color:#BFAEA2">
+<span style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:#F08A6E"><span style="font-size:20px">⌂</span>Hoje</span><span style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><span style="font-size:20px">☰</span>Rotina</span><span style="width:56px;height:56px;margin-top:-22px;border-radius:50%;background:#F08A6E;color:#1A1310;display:grid;place-items:center;font-size:26px">+</span><span style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><span style="font-size:20px">↗</span>Evolução</span><span style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><span style="font-size:20px">○</span>Perfil</span></div>
+</div></div>
+
+<div style="display:flex;flex-direction:column;gap:10px"><span style="font:600 13px 'JetBrains Mono';color:#6E5C51">Resultado · dark</span>
+<div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#1A1310;color:#F6EDE6;box-shadow:0 30px 60px -34px rgba(42,27,20,.6);display:flex;flex-direction:column">
+<div style="height:47px;flex:none;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 6px;font:600 15px Figtree"><span>22:10</span><span>●●● ▮</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 16px"><span style="width:44px;height:44px;display:grid;place-items:center;font-size:20px">←</span><span style="font:600 14px Figtree;color:#BFAEA2">9 de outubro</span><span style="height:44px;padding:0 16px;border-radius:99px;background:#2C211C;border:1px solid #3E3029;display:grid;place-items:center;font:700 14px Figtree">Compartilhar</span></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 24px 16px">
+<div style="width:184px;height:184px;border-radius:50%;background:conic-gradient(#F08A6E 0 72%,#3E3029 72% 100%);display:grid;place-items:center"><div style="width:158px;height:158px;border-radius:50%;background:#1A1310;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font:800 76px/0.9 'Bricolage Grotesque';letter-spacing:-0.05em">72</span><span style="font:600 13px Figtree;color:#BFAEA2">de 100</span></div></div>
+<span style="font:700 14px Figtree;color:#7FD3A2;background:#10301F;padding:6px 12px;border-radius:99px">▲ 4 pontos desde 2 de outubro</span>
+<p style="margin:4px 0 0;text-align:center;font:600 18px/1.35 Figtree;text-wrap:pretty">Sua pele está bem hidratada. O ponto de atenção é a oleosidade na zona T.</p></div>
+<div style="margin:0 16px;background:#2C211C;border-radius:24px;padding:4px 18px;display:flex;flex-direction:column;font-size:15px">
+<div style="min-height:48px;display:grid;grid-template-columns:104px 1fr 58px;align-items:center;gap:12px;border-bottom:1px solid #3E3029"><span>Hidratação</span><span style="height:8px;border-radius:4px;background:linear-gradient(90deg,#F08A6E 84%,#3E3029 84%)"></span><span style="text-align:right;font:700 16px 'Bricolage Grotesque'">84 <small style="font:600 12px Figtree;color:#7FD3A2">▲3</small></span></div>
+<div style="min-height:48px;display:grid;grid-template-columns:104px 1fr 58px;align-items:center;gap:12px;border-bottom:1px solid #3E3029"><span>Textura</span><span style="height:8px;border-radius:4px;background:linear-gradient(90deg,#F08A6E 78%,#3E3029 78%)"></span><span style="text-align:right;font:700 16px 'Bricolage Grotesque'">78 <small style="font:600 12px Figtree;color:#7FD3A2">▲5</small></span></div>
+<div style="min-height:48px;display:grid;grid-template-columns:104px 1fr 58px;align-items:center;gap:12px;border-bottom:1px solid #3E3029"><span>Manchas</span><span style="height:8px;border-radius:4px;background:linear-gradient(90deg,#F08A6E 70%,#3E3029 70%)"></span><span style="text-align:right;font:700 16px 'Bricolage Grotesque'">70 <small style="font:600 12px Figtree;color:#7FD3A2">▲2</small></span></div>
+<div style="min-height:48px;display:grid;grid-template-columns:104px 1fr 58px;align-items:center;gap:12px"><b>Oleosidade</b><span style="height:8px;border-radius:4px;background:linear-gradient(90deg,#F5C46B 54%,#3E3029 54%)"></span><span style="text-align:right;font:700 16px 'Bricolage Grotesque'">54 <small style="font:600 12px Figtree;color:#BFAEA2">foco</small></span></div></div>
+<div style="margin:14px 16px 0;height:56px;border-radius:99px;background:#F08A6E;color:#1A1310;display:grid;place-items:center;font:700 17px Figtree">Ver minha rotina pra zona T</div>
+</div></div>
+
+<div style="display:flex;flex-direction:column;gap:10px"><span style="font:600 13px 'JetBrains Mono';color:#6E5C51">Conflito crítico · dark</span>
+<div style="width:390px;height:844px;border-radius:44px;overflow:hidden;position:relative;background:#1A1310;color:#F6EDE6;box-shadow:0 30px 60px -34px rgba(42,27,20,.6)">
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.5)"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;background:#221915;border-radius:32px 32px 0 0;padding:12px 20px 36px;display:flex;flex-direction:column;gap:16px">
+<span style="align-self:center;width:40px;height:5px;border-radius:3px;background:#3E3029"></span>
+<span style="align-self:flex-start;display:flex;align-items:center;gap:8px;height:32px;padding:0 12px;border-radius:99px;background:#3A1714;border:1.5px solid #7A2E26;color:#FF9C8F;font:700 13px Figtree"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7.9 2h8.2L22 7.9v8.2L16.1 22H7.9L2 16.1V7.9z"></path><path d="M12 8v4M12 16h.01"></path></svg>Importante</span>
+<b style="font:700 26px/1.15 'Bricolage Grotesque';letter-spacing:-0.02em">Retinol + peróxido de benzoíla não vão juntos.</b>
+<span style="font-size:16px;line-height:1.45;color:#BFAEA2">Um desativa o outro e a pele irrita. Os dois estão na sua noite de segunda.</span>
+<div style="background:#2C211C;border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;font-size:15px;line-height:1.4"><b>Nossa sugestão</b><span>Gel secativo de manhã, só nas espinhas. Retinol fica à noite.</span></div>
+<div style="height:56px;border-radius:99px;background:#F08A6E;color:#1A1310;display:grid;place-items:center;font:700 17px Figtree">Aplicar na rotina</div>
+<div style="height:44px;display:grid;place-items:center;font:600 15px Figtree">Manter como está</div></div>
+</div></div>
+
+</div></section>
+
+<section data-screen-label="03 Loja" style="display:flex;flex-direction:column;gap:28px">
+<h2 style="margin:0;font:700 34px/1 'Bricolage Grotesque';letter-spacing:-0.02em">03 · Loja e compartilhamento <span style="font:500 17px Figtree;color:#6E5C51;letter-spacing:0">430×932 (exportar 3× → 1290×2796, App Store 6,7") · card 1:1 para feed</span></h2>
+<div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+
+<div style="width:430px;height:932px;border-radius:24px;overflow:hidden;background:#FFFBF8;border:1px solid #EADFD6;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;padding:64px 32px 0;gap:14px;position:relative">
+<span style="font:700 14px Figtree;color:#B8462F;letter-spacing:.04em;text-transform:uppercase">Análise em 10 segundos</span>
+<b style="font:800 44px/1.02 'Bricolage Grotesque';letter-spacing:-0.035em;text-align:center">Uma selfie.<br>Sua pele, lida.</b>
+<div style="position:absolute;left:55px;top:300px;width:320px;height:690px;border-radius:44px;background:#FFFFFF;border:8px solid #2A1B14;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;padding:60px 20px 0;gap:14px">
+<div style="width:170px;height:170px;border-radius:50%;background:conic-gradient(#B8462F 0 72%,#EFE5DC 72% 100%);display:grid;place-items:center"><div style="width:146px;height:146px;border-radius:50%;background:#FFFFFF;display:grid;place-items:center;font:800 72px 'Bricolage Grotesque';letter-spacing:-0.05em">72</div></div>
+<span style="font:700 13px Figtree;color:#1F6B45;background:#E1F1E7;padding:5px 10px;border-radius:99px">▲ 4 pontos</span>
+<div style="align-self:stretch;display:flex;flex-direction:column;gap:10px;margin-top:10px;font-size:13px">
+<div style="display:grid;grid-template-columns:84px 1fr;align-items:center;gap:10px"><span>Hidratação</span><span style="height:7px;border-radius:4px;background:linear-gradient(90deg,#B8462F 84%,#EFE5DC 84%)"></span></div>
+<div style="display:grid;grid-template-columns:84px 1fr;align-items:center;gap:10px"><span>Textura</span><span style="height:7px;border-radius:4px;background:linear-gradient(90deg,#B8462F 78%,#EFE5DC 78%)"></span></div>
+<div style="display:grid;grid-template-columns:84px 1fr;align-items:center;gap:10px"><span>Manchas</span><span style="height:7px;border-radius:4px;background:linear-gradient(90deg,#B8462F 70%,#EFE5DC 70%)"></span></div>
+<div style="display:grid;grid-template-columns:84px 1fr;align-items:center;gap:10px"><b>Oleosidade</b><span style="height:7px;border-radius:4px;background:linear-gradient(90deg,#D98A2B 54%,#EFE5DC 54%)"></span></div></div></div>
+</div>
+
+<div style="width:430px;height:932px;border-radius:24px;overflow:hidden;background:#B8462F;color:#FFFFFF;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;padding:64px 32px 0;gap:14px;position:relative">
+<span style="font:700 14px Figtree;color:#F7E2D8;letter-spacing:.04em;text-transform:uppercase">Detector de conflitos</span>
+<b style="font:800 44px/1.02 'Bricolage Grotesque';letter-spacing:-0.035em;text-align:center">Posso misturar?<br>A gente responde.</b>
+<div style="position:absolute;left:55px;top:300px;width:320px;height:690px;border-radius:44px;background:#FFFBF8;border:8px solid #2A1B14;box-sizing:border-box;display:flex;flex-direction:column;padding:56px 16px 0;gap:10px;color:#2A1B14">
+<div style="background:#FDE7E3;border:1.5px solid #F4B8AE;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.4;color:#4D140D"><b style="color:#A3271B">⬣ Importante</b><span>Retinol + ácido glicólico na mesma noite irritam.</span></div>
+<div style="background:#E1F1E7;border:1.5px solid #A8D4B9;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.4;color:#173D29"><b style="color:#1F6B45">✓ Resolvido na agenda</b><span>Retinol seg/qua/sex. Ácido ter/sáb.</span></div>
+<div style="background:#FFFFFF;border-radius:16px;padding:6px 14px;display:flex;flex-direction:column;font-size:13px">
+<span style="min-height:40px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #F1E7DE"><b style="font:700 16px 'Bricolage Grotesque';color:#B8462F">1</b>Gel de limpeza</span>
+<span style="min-height:40px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #F1E7DE"><b style="font:700 16px 'Bricolage Grotesque';color:#B8462F">2</b>Retinol 0,3%</span>
+<span style="min-height:40px;display:flex;align-items:center;gap:10px"><b style="font:700 16px 'Bricolage Grotesque';color:#B8462F">3</b>Hidratante</span></div></div>
+</div>
+
+<div style="width:430px;height:932px;border-radius:24px;overflow:hidden;background:#FBEDD6;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;padding:64px 32px 0;gap:14px;position:relative">
+<span style="font:700 14px Figtree;color:#7A4A00;letter-spacing:.04em;text-transform:uppercase">Prova, não promessa</span>
+<b style="font:800 44px/1.02 'Bricolage Grotesque';letter-spacing:-0.035em;text-align:center">Veja sua pele<br>mudar, semana<br>a semana.</b>
+<div style="position:absolute;left:55px;top:350px;width:320px;height:640px;border-radius:44px;background:#FFFBF8;border:8px solid #2A1B14;box-sizing:border-box;display:flex;flex-direction:column;padding:56px 16px 0;gap:12px">
+<div style="position:relative;height:250px;border-radius:16px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr"><div style="background:repeating-linear-gradient(135deg,#C9A58C 0 10px,#C29E85 10px 20px)"></div><div style="background:repeating-linear-gradient(135deg,#D2AF96 0 10px,#CBA88F 10px 20px)"></div><span style="position:absolute;left:10px;top:10px;font:700 11px Figtree;background:#FFFFFF;padding:3px 7px;border-radius:6px">11 set</span><span style="position:absolute;right:10px;top:10px;font:700 11px Figtree;background:#FFFFFF;padding:3px 7px;border-radius:6px">9 out</span><span style="position:absolute;left:50%;top:0;bottom:0;width:3px;margin-left:-1.5px;background:#FFFFFF"></span></div>
+<div style="background:#FFFFFF;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px"><b style="font:800 30px/1 'Bricolage Grotesque'">64 → 72</b><svg viewBox="0 0 260 70" width="100%" height="70"><path d="M8 60 L70 52 L130 46 L190 32 L252 14" fill="none" stroke="#B8462F" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="252" cy="14" r="6" fill="#FFFFFF" stroke="#B8462F" stroke-width="3"></circle></svg></div></div>
+<span style="position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:11px;color:#7A4A00">Fotos reais de usuárias com autorização · sem retoque</span>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:28px">
+<div style="width:540px;height:540px;border-radius:24px;overflow:hidden;background:#FFFBF8;border:1px solid #EADFD6;box-sizing:border-box;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr auto;gap:16px;padding:32px">
+<span style="grid-column:span 2;display:flex;justify-content:space-between;align-items:center"><b style="font:800 30px/1 'Bricolage Grotesque';letter-spacing:-0.05em">viço</b><span style="font:600 14px Figtree;color:#6E5C51">meus 30 dias</span></span>
+<div style="border-radius:18px;background:repeating-linear-gradient(135deg,#8A5E45 0 10px,#82573F 10px 20px);display:flex;align-items:flex-end;padding:12px;font:700 13px Figtree;color:#FFFFFF">2 set</div>
+<div style="border-radius:18px;background:repeating-linear-gradient(135deg,#94684E 0 10px,#8C6148 10px 20px);display:flex;align-items:flex-end;padding:12px;font:700 13px Figtree;color:#FFFFFF">2 out</div>
+<span style="grid-column:span 2;display:flex;align-items:flex-end;gap:16px"><b style="font:800 80px/0.85 'Bricolage Grotesque';letter-spacing:-0.06em;color:#B8462F">+8</b><span style="font:600 17px/1.35 Figtree;padding-bottom:4px">pontos no Skin Score.<br>Manchas ▲11 · textura ▲6</span></span></div>
+<span style="font:600 13px 'JetBrains Mono';color:#6E5C51">Card 1:1 · versão clara (story 9:16 em Viço App → S08d)</span>
+<div style="display:flex;align-items:flex-end;gap:20px">
+<div style="width:180px;height:180px;border-radius:40px;background:#B8462F;display:grid;place-items:center"><svg width="116" height="116" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="#F7E2D8"></circle><path d="M18 30a14 14 0 0 1 14-14" stroke="#B8462F" stroke-width="5.5" stroke-linecap="round" fill="none"></path><circle cx="43" cy="43" r="4" fill="#F2B66D"></circle></svg></div>
+<div style="width:120px;height:120px;border-radius:27px;background:#1A1310;display:grid;place-items:center"><svg width="78" height="78" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="#F08A6E"></circle><path d="M18 30a14 14 0 0 1 14-14" stroke="#1A1310" stroke-width="5.5" stroke-linecap="round" fill="none"></path><circle cx="43" cy="43" r="4" fill="#F2B66D"></circle></svg></div>
+<div style="width:60px;height:60px;border-radius:14px;background:#B8462F;display:grid;place-items:center"><svg width="40" height="40" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="#F7E2D8"></circle><path d="M18 30a14 14 0 0 1 14-14" stroke="#B8462F" stroke-width="6.5" stroke-linecap="round" fill="none"></path></svg></div>
+<div style="width:29px;height:29px;border-radius:7px;background:#B8462F;display:grid;place-items:center"><svg width="21" height="21" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="#F7E2D8"></circle><path d="M18 30a14 14 0 0 1 14-14" stroke="#B8462F" stroke-width="8" stroke-linecap="round" fill="none"></path></svg></div></div>
+<span style="font:600 13px 'JetBrains Mono';color:#6E5C51">Ícone · claro / dark (iOS 18 tinted) · 60 · 29 — ponto "sol" some abaixo de 60px</span>
+</div>
+
+</div></section>
+
+</div>
+</div>
+</x-dc>
+</body>
+</html>

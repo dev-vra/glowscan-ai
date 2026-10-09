@@ -1,0 +1,76 @@
+/* Viço — motion. Importar depois de tokens.css. Tudo desliga com prefers-reduced-motion (já em tokens.css).
+   Princípio: movimento confirma ação ou mostra progresso; nunca decorativo em loop (exceto loaders). */
+@theme {
+  --ease-out: cubic-bezier(.22, .8, .24, 1);      /* = --ease-lux; padrão para entradas */
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);    /* troca de abas, sheets */
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1); /* check, selo ▲, toque no "+" */
+  --dur-1: 120ms; /* press, hover, cor */
+  --dur-2: 200ms; /* chips, toggles, check */
+  --dur-3: 320ms; /* cards entrando, sheet */
+  --dur-4: 600ms; /* anel de score preenchendo */
+  --dur-5: 1200ms; /* contagem do score */
+}
+
+/* 1. Press em qualquer botão/alvo tocável */
+.press { transition: transform var(--dur-1) var(--ease-out), background-color var(--dur-1); }
+.press:active { transform: scale(.97); }
+
+/* 2. Entrada de cards na tela (stagger 40ms via style="--i:n") */
+@keyframes vico-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.rise { animation: vico-rise var(--dur-3) var(--ease-out) both; animation-delay: calc(var(--i, 0) * 40ms); }
+
+/* 3. Check do passo de rotina: círculo enche + ✓ desenha + linha riscada */
+@keyframes vico-pop { 0% { transform: scale(.6); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes vico-draw { from { stroke-dashoffset: 24; } to { stroke-dashoffset: 0; } }
+.step-check[data-done="true"] { animation: vico-pop var(--dur-2) var(--ease-spring); background: var(--color-accent); }
+.step-check[data-done="true"] path { stroke-dasharray: 24; animation: vico-draw var(--dur-2) var(--ease-out) 60ms both; }
+.step-label { background: linear-gradient(currentColor, currentColor) 0 55% / 0 1.5px no-repeat; transition: background-size var(--dur-3) var(--ease-out), color var(--dur-2); }
+.step-label[data-done="true"] { background-size: 100% 1.5px; color: var(--color-muted); }
+
+/* 4. Anel de score: preenche 0 → valor (usar @property para animar conic-gradient) */
+@property --ring { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+.score-ring { background: conic-gradient(var(--color-accent) 0 var(--ring), var(--color-border) var(--ring) 100%); transition: --ring var(--dur-4) var(--ease-out); }
+/* JS: el.style.setProperty('--ring', score + '%') após mount. Número conta 0→score em --dur-5 (requestAnimationFrame, easeOutCubic). */
+
+/* 5. Barras de métrica: crescem em sequência após o anel (delay 600ms + i*60ms) */
+.metric-fill { transform-origin: left; animation: vico-grow var(--dur-3) var(--ease-out) both; animation-delay: calc(600ms + var(--i, 0) * 60ms); }
+@keyframes vico-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* 6. Selo ▲ delta aparece por último */
+.delta-badge { animation: vico-pop var(--dur-2) var(--ease-spring) 1100ms both; }
+
+/* 7. Scan: moldura respira enquanto ok; anel de progresso 3s antes da captura */
+@keyframes vico-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.015); } }
+.face-guide[data-state="ok"] { animation: vico-breathe 1.6s var(--ease-in-out) infinite; border-style: solid; border-color: #8FD6A8; }
+.face-guide[data-state="adjust"] { border-style: dashed; border-color: var(--color-gold); transition: border-color var(--dur-2); }
+.face-guide[data-state="out"] { border-style: dashed; border-color: #FFFFFF; }
+/* Captura automática: 3s estável com estado ok → contorno faz stroke-dashoffset 100%→0 em 3s linear, depois flash branco 120ms + haptic (navigator.vibrate(12)). */
+@keyframes vico-flash { from { opacity: .7; } to { opacity: 0; } }
+.capture-flash { position: fixed; inset: 0; background: #FFFFFF; animation: vico-flash 240ms ease-out forwards; pointer-events: none; }
+
+/* 8. "Lendo sua pele…": anel gira devagar + itens da lista entram um a um (a cada ~2,5s, conforme o stream da IA) */
+@keyframes vico-spin { to { transform: rotate(360deg); } }
+.reading-ring { animation: vico-spin 2.4s linear infinite; }
+
+/* 9. Bottom sheet (conflito crítico, excluir) */
+@keyframes vico-sheet-in { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes vico-fade-in { from { opacity: 0; } to { opacity: 1; } }
+.sheet { animation: vico-sheet-in var(--dur-3) var(--ease-out); }
+.scrim { animation: vico-fade-in var(--dur-3) var(--ease-out); background: rgba(42, 27, 20, .4); }
+
+/* 10. Skeleton (estado carregando) */
+@keyframes vico-shimmer { from { background-position: -200px 0; } to { background-position: calc(200px + 100%) 0; } }
+.skeleton { background: linear-gradient(90deg, var(--color-surface) 0, var(--color-surface-raised) 50%, var(--color-surface) 100%) var(--color-surface) no-repeat; background-size: 200px 100%; animation: vico-shimmer 1.2s linear infinite; border-radius: var(--radius-md); }
+
+/* 11. Streak: ao completar a rotina, card terracota entra com rise + número sobe 1 (translateY -100% troca dígito, 320ms) */
+.streak-digit { display: inline-block; transition: transform var(--dur-3) var(--ease-spring); }
+
+/* 12. Toggle / segmented */
+.segment-thumb { transition: transform var(--dur-2) var(--ease-in-out); }
+.toggle-knob { transition: transform var(--dur-2) var(--ease-spring); }
+
+/* 13. Antes/depois: puxador segue o dedo sem easing; ao soltar volta pro mais próximo de 50% só se < 4% de distância */
+
+/* 14. Troca de rota: fade 120ms + rise no conteúdo novo. Sem slide lateral (PWA). View Transitions API se disponível. */
+::view-transition-old(root) { animation: vico-fade-in var(--dur-1) reverse both; }
+::view-transition-new(root) { animation: vico-rise var(--dur-3) var(--ease-out) both; }
