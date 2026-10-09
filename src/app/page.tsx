@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Camera, Check, Download, ListOrdered, ScanFace, Share2, Smartphone, Sun, TrendingUp, Zap } from "lucide-react";
+import { APK_URL, SiteShell } from "@/components/site/site-shell";
 import { buttonClasses } from "@/components/ui/button";
+import { ConflictAlert } from "@/components/ui/conflict-alert";
 import { Eyebrow } from "@/components/ui/card";
 import { MetricBar } from "@/components/ui/metric-bar";
 import { ScoreRing } from "@/components/ui/score-ring";
@@ -39,8 +41,6 @@ const EXAMPLE_METRICS = [
   { label: "Manchas", score: 58, delta: 2 },
 ];
 
-const APK_URL = "/download/vico.apk";
-
 function AppDownload({ tone = "light" }: { tone?: "light" | "dark" }) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row">
@@ -62,11 +62,8 @@ function Cta({ className }: { className?: string }) {
 
 export default function LandingPage() {
   return (
+    <SiteShell>
     <main className="mx-auto max-w-content px-5 pb-16 lg:max-w-wide">
-      <nav className="flex items-center justify-between py-6">
-        <span className="font-display text-[32px] font-extrabold tracking-[-0.05em] text-accent">viço</span>
-        <Link href="/entrar" className={buttonClasses("ghost", "sm")}>Entrar</Link>
-      </nav>
 
       <section className="grid items-center gap-10 py-8 lg:grid-cols-2 lg:py-16">
         <div className="space-y-5">
@@ -108,7 +105,7 @@ export default function LandingPage() {
         </ul>
       </section>
 
-      <section aria-labelledby="como" className="space-y-5 py-12">
+      <section id="produto" aria-labelledby="como" className="scroll-mt-24 space-y-5 py-12">
         <Eyebrow id="como">Como funciona</Eyebrow>
         <ol className="grid gap-3 lg:grid-cols-3">
           {STEPS.map(({ icon: Icon, title, text }, i) => (
@@ -121,6 +118,42 @@ export default function LandingPage() {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section aria-labelledby="telas" className="space-y-5 py-12">
+        <Eyebrow id="telas">O que você vê no app</Eyebrow>
+        <h2 className="font-display text-[30px] leading-9">Resultado, rotina e evolução — na mesma tela de bolso.</h2>
+        <div className="grid gap-4 lg:grid-cols-3">
+          <figure className="space-y-3 rounded-[24px] bg-surface-raised p-5">
+            <figcaption className="font-bold">Resultado da análise</figcaption>
+            <div className="flex justify-center"><ScoreRing score={68} size="sm" animate={false} /></div>
+            <div>
+              {[{ label: "Textura", score: 74 }, { label: "Poros", score: 61 }, { label: "Manchas", score: 52, focus: true }].map((m, i) => (
+                <MetricBar key={m.label} index={i} label={m.label} score={m.score} focus={m.focus} />
+              ))}
+            </div>
+            <p className="text-xs text-muted">Exemplo ilustrativo</p>
+          </figure>
+          <figure className="space-y-3 rounded-[24px] bg-surface-raised p-5">
+            <figcaption className="font-bold">Rotina da noite</figcaption>
+            <ol className="space-y-2 text-[15px]">
+              {["Gel de limpeza", "Sérum de retinol · seg, qua, sex", "Hidratante"].map((t, i) => (
+                <li key={t} className="flex items-center gap-3"><span className="w-5 font-display font-bold text-accent">{i + 1}</span>{t}</li>
+              ))}
+            </ol>
+            <ConflictAlert level="resolved" title="Retinol e ácido em noites diferentes">Ajustado automaticamente na sua semana.</ConflictAlert>
+          </figure>
+          <figure className="space-y-3 rounded-[24px] bg-surface-raised p-5">
+            <figcaption className="font-bold">Evolução</figcaption>
+            <svg viewBox="0 0 300 120" className="w-full" role="img" aria-label="Exemplo: Skin Score subindo de 60 para 72 em 5 semanas">
+              {[30, 60, 90].map((y) => <line key={y} x1="0" x2="300" y1={y} y2={y} stroke="#F1E7DE" />)}
+              <path d="M10 95 L80 88 L150 70 L220 60 L290 40" fill="none" className="stroke-accent" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="290" cy="40" r="6" className="fill-surface-raised stroke-accent" strokeWidth="3" />
+            </svg>
+            <p className="text-[15px]"><span className="font-bold text-success">▲ 12 pontos</span> em 5 semanas</p>
+            <p className="text-xs text-muted">Exemplo ilustrativo</p>
+          </figure>
+        </div>
       </section>
 
       <section aria-labelledby="recursos" className="space-y-5 py-12">
@@ -136,8 +169,8 @@ export default function LandingPage() {
         </ul>
       </section>
 
-      <section aria-labelledby="preco" className="space-y-5 py-12">
-        <Eyebrow id="preco">Preço</Eyebrow>
+      <section id="preco" aria-labelledby="preco-title" className="scroll-mt-24 space-y-5 py-12">
+        <Eyebrow id="preco-title">Preço</Eyebrow>
         <h2 className="font-display text-[30px] leading-9">{BILLING_COPY.trialHeadline}</h2>
         <div className="grid gap-3 lg:max-w-2xl lg:grid-cols-2">
           <div className="relative space-y-1 rounded-[20px] border-[2.5px] border-accent bg-surface-raised p-5">
@@ -157,6 +190,19 @@ export default function LandingPage() {
             <li key={t} className="flex items-center gap-2"><Check className="size-5 text-success" strokeWidth={2.5} aria-hidden /> {t}</li>
           ))}
         </ul>
+      </section>
+
+      <section className="grid gap-4 py-12 lg:grid-cols-2">
+        <Link href="/casos-de-uso" className="press space-y-2 rounded-[24px] bg-surface p-6">
+          <p className="text-[13px] font-bold uppercase tracking-[0.04em] text-accent">Casos de uso</p>
+          <p className="font-display text-[24px]">Começando do zero, armário cheio, retinol, gestação, pele sensível…</p>
+          <p className="font-semibold text-accent">Ver os 6 casos →</p>
+        </Link>
+        <Link href="/como-usar" className="press space-y-2 rounded-[24px] bg-surface p-6">
+          <p className="text-[13px] font-bold uppercase tracking-[0.04em] text-accent">Manual de uso</p>
+          <p className="font-display text-[24px]">Do download à primeira evolução, em 11 passos curtos.</p>
+          <p className="font-semibold text-accent">Abrir o manual →</p>
+        </Link>
       </section>
 
       <section aria-labelledby="faq" className="space-y-5 py-12">
@@ -181,9 +227,7 @@ export default function LandingPage() {
         </p>
       </section>
 
-      <footer className="pt-10 text-sm text-muted">
-        Viço · Análise cosmética, não é diagnóstico médico.
-      </footer>
     </main>
+    </SiteShell>
   );
 }
