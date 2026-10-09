@@ -16,7 +16,7 @@ import {
 } from "./actions";
 
 const SKIN_LABELS: Record<SkinType, string> = { dry: "Seca", oily: "Oleosa", combination: "Mista", normal: "Normal", sensitive: "Sensível" };
-const PLAN_LABELS: Record<string, string> = { monthly: "Plano mensal", yearly: "Plano anual" };
+const PLAN_LABELS: Record<string, string> = { monthly: "Plano mensal", yearly: "Plano anual", beta: "Beta grátis" };
 const longDate = new Intl.DateTimeFormat("pt-BR", { day: "numeric", month: "long" });
 
 function Group({ title, children }: { title: string; children: ReactNode }) {
@@ -62,6 +62,7 @@ async function Profile() {
   ]);
   const initial = user.email.charAt(0).toUpperCase();
   const plan = subscription ? (PLAN_LABELS[subscription.plan] ?? "Assinatura") : "Sem assinatura";
+  const isBeta = subscription?.plan === "beta";
   const renewal = subscription?.currentPeriodEnd ? `Renova em ${longDate.format(subscription.currentPeriodEnd)}` : undefined;
 
   return (
@@ -83,6 +84,7 @@ async function Profile() {
         )}
       </Group>
 
+{!isBeta && (
       <Group title="Assinatura">
         <form action={portalAction}>
           <button type="submit" className="flex min-h-14 w-full items-center gap-3 py-2 text-left">
@@ -94,6 +96,7 @@ async function Profile() {
           </button>
         </form>
       </Group>
+      )}
 
       <Group title="Privacidade">
         <Row label="Análise facial" hint={consented ? "Autorizada." : "Desativada. A próxima análise pede autorização."}>
