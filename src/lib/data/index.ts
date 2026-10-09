@@ -161,3 +161,9 @@ export async function getPreviousScan(userId: string, scan: FaceScan) {
   });
   return row ? toFaceScan(row) : null;
 }
+
+export async function signInWithPassword(email: string, password: string) {
+  const supabase = await supabaseAuth();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  return !error;
+}

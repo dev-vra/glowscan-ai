@@ -24,12 +24,13 @@ function priceFor(plan: Plan) {
 
 async function ensureCustomer(userId: string, email: string) {
   const existing = await db().subscription.findUnique({ where: { userId } });
-  if (existing) return existing.stripeCustomerId;
+  if (existing && !isBetaCustomer(existing.stripeCustomerId)) return existing.stripeCustomerId;
   const customer = await stripe().customers.create({ email, metadata: { userId } });
+  // Ex-tester beta vira cliente Stripe de verdade ao assinar.
   await db().subscription.upsert({
     where: { userId },
     create: { userId, stripeCustomerId: customer.id, status: "canceled", plan: "monthly" },
-    update: {},
+    update: { stripeCustomerId: customer.id, status: "canceled", plan: "monthly" },
   });
   return customer.id;
 }
@@ -53,9 +54,13 @@ export async function createCheckoutUrl(userId: string, email: string, plan: Pla
   return session.url;
 }
 
+// Acesso beta liberado pelo admin: assinatura local, sem cliente no Stripe.
+export const BETA_CUSTOMER_PREFIX = "beta_";
+export const isBetaCustomer = (customerId: string) => customerId.startsWith(BETA_CUSTOMER_PREFIX);
+
 export async function createPortalUrl(userId: string) {
   const sub = await db().subscription.findUnique({ where: { userId } });
-  if (!sub) return null;
+  if (!sub || isBetaCustomer(sub.stripeCustomerId)) return null;
   const portal = await stripe().billingPortal.sessions.create({
     customer: sub.stripeCustomerId,
     return_url: `${env().NEXT_PUBLIC_SITE_URL}/app/perfil`,

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Suspense, type ReactNode } from "react";
 import { ChevronRight, Lock } from "lucide-react";
 import { PageSkeleton } from "@/components/app/page-skeleton";
@@ -5,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/card";
 import { requirePageUser } from "@/lib/auth";
 import { hasConsent, hasFacialConsent } from "@/lib/data";
+import { isAdmin } from "@/lib/data/admin";
 import { getAccountSummary, getSkinProfile } from "@/lib/data/profile";
 import { isEnabled } from "@/lib/flags";
 import { portalAction } from "@/app/assinar/actions";
@@ -108,6 +110,18 @@ async function Profile() {
           <Lock className="size-5 text-muted" aria-hidden />
         </Row>
       </Group>
+
+      {isAdmin(user.email) && (
+        <Group title="Admin">
+          <Link href="/app/admin" className="flex min-h-14 items-center gap-3 py-2">
+            <span className="flex-1">
+              <span className="block text-[15px] font-semibold">Acessos dos testers</span>
+              <span className="block text-[13px] text-muted">Criar login, liberar ou revogar beta.</span>
+            </span>
+            <ChevronRight className="size-5 text-muted" aria-hidden />
+          </Link>
+        </Group>
+      )}
 
       <details className="group rounded-[24px] border-[1.5px] border-danger-line bg-danger-soft px-4">
         <summary className="flex min-h-14 cursor-pointer list-none items-center font-bold text-danger">Excluir conta</summary>

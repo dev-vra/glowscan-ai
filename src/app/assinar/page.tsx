@@ -1,9 +1,11 @@
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { Check } from "lucide-react";
 import { PageSkeleton } from "@/components/app/page-skeleton";
 import { Button } from "@/components/ui/button";
 import { requirePageUser } from "@/lib/auth";
 import { getPlanPrices } from "@/lib/billing";
+import { hasActiveSubscription } from "@/lib/data";
 import { BILLING_COPY } from "@/lib/copy";
 import { checkoutAction, portalAction } from "./actions";
 
@@ -15,7 +17,8 @@ const BENEFITS = [
 ];
 
 async function PlanPicker() {
-  await requirePageUser();
+  const user = await requirePageUser();
+  if (await hasActiveSubscription(user.id)) redirect("/app"); // tester beta ou já assinante
   const prices = await getPlanPrices();
   const plans = [
     { id: "yearly", name: BILLING_COPY.annual.label, price: prices.yearly, detail: `${prices.yearlyPerMonth}/mês`, badge: prices.savingsPercent > 0 ? `Economize ${prices.savingsPercent}%` : null, featured: true },

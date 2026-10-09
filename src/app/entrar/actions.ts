@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { sendMagicLink, startGoogleSignIn } from "@/lib/data";
+import { sendMagicLink, signInWithPassword, startGoogleSignIn } from "@/lib/data";
 import { env } from "@/lib/env";
 
 export type SignInState = { error: string | null; sentTo: string | null };
@@ -22,6 +22,14 @@ export async function signInAction(_prev: SignInState, formData: FormData): Prom
     return { error: "Não conseguimos enviar o link agora. Tente em alguns minutos.", sentTo: null };
   }
   return { error: null, sentTo: parsed.data };
+}
+
+export async function passwordSignInAction(_prev: SignInState, formData: FormData): Promise<SignInState> {
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const password = String(formData.get("password") ?? "");
+  if (!emailSchema.safeParse(email).success || !password) return { error: "Preencha e-mail e senha.", sentTo: null };
+  if (!(await signInWithPassword(email, password))) return { error: "E-mail ou senha não conferem.", sentTo: null };
+  redirect("/app");
 }
 
 export async function googleSignInAction() {

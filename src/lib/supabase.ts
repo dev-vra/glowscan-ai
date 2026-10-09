@@ -50,3 +50,15 @@ export async function deleteAuthUser(userId: string) {
   const { error } = await supabaseAdmin().auth.admin.deleteUser(userId);
   if (error) throw new Error(`DELETE_USER_FAILED: ${error.message}`);
 }
+
+// Cria usuário já confirmado (sem e-mail): usado pelo painel admin para liberar testers.
+export async function createAuthUser(email: string, password: string) {
+  const { data, error } = await supabaseAdmin().auth.admin.createUser({ email, password, email_confirm: true });
+  if (error || !data.user) throw new Error(`CREATE_USER_FAILED: ${error?.message ?? "sem usuário"}`);
+  return data.user.id;
+}
+
+export async function setAuthPassword(userId: string, password: string) {
+  const { error } = await supabaseAdmin().auth.admin.updateUserById(userId, { password });
+  if (error) throw new Error(`SET_PASSWORD_FAILED: ${error.message}`);
+}
