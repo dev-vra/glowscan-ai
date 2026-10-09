@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Camera, Check, ListOrdered, ScanFace, Share2, Sun, TrendingUp, Zap } from "lucide-react";
+import { Camera, Check, Download, ListOrdered, ScanFace, Share2, Smartphone, Sun, TrendingUp, Zap } from "lucide-react";
 import { buttonClasses } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/card";
 import { MetricBar } from "@/components/ui/metric-bar";
@@ -39,6 +39,21 @@ const EXAMPLE_METRICS = [
   { label: "Manchas", score: 58, delta: 2 },
 ];
 
+const APK_URL = "/download/vico.apk";
+
+function AppDownload({ tone = "light" }: { tone?: "light" | "dark" }) {
+  return (
+    <div className="flex flex-col gap-3 sm:flex-row">
+      <a href={APK_URL} download className={buttonClasses(tone === "dark" ? "dark" : "secondary", "lg", "sm:w-auto")}>
+        <Download className="size-5" aria-hidden /> Baixar para Android
+      </a>
+      <Link href="/entrar" className={buttonClasses("ghost", "lg", tone === "dark" ? "text-on-accent hover:bg-white/10 sm:w-auto" : "sm:w-auto")}>
+        <Smartphone className="size-5" aria-hidden /> iPhone: use pelo navegador
+      </Link>
+    </div>
+  );
+}
+
 function Cta({ className }: { className?: string }) {
   return (
     <Link href="/entrar" className={buttonClasses("primary", "lg", className)}>Começar 7 dias grátis</Link>
@@ -62,7 +77,8 @@ export default function LandingPage() {
             Uma selfie lê sua pele. Uma foto do rótulo lê seus produtos. O Viço junta os dois e mostra a evolução.
           </p>
           <Cta className="lg:w-auto" />
-          <p className="text-sm text-muted">{BILLING_COPY.trialSub}</p>
+          <AppDownload />
+          <p className="text-sm text-muted">{BILLING_COPY.trialSub} App para iPhone em breve na App Store.</p>
         </div>
         <figure className="space-y-4 rounded-[28px] bg-surface-raised p-6" aria-label="Exemplo de resultado">
           <div className="flex items-center gap-5">
@@ -158,6 +174,11 @@ export default function LandingPage() {
       <section className="space-y-5 rounded-[28px] bg-accent p-8 text-on-accent lg:p-12">
         <h2 className="font-display text-[34px] leading-10">Sua pele em 30 dias, em gráfico.</h2>
         <Link href="/entrar" className={buttonClasses("dark", "lg", "lg:w-auto")}>Começar 7 dias grátis</Link>
+        <AppDownload tone="dark" />
+        <p className="text-sm opacity-85">
+          No Android, permita &quot;instalar apps desconhecidos&quot; quando o celular pedir. No iPhone, abra o site no Safari e toque em
+          Compartilhar → Adicionar à Tela de Início.
+        </p>
       </section>
 
       <footer className="pt-10 text-sm text-muted">
