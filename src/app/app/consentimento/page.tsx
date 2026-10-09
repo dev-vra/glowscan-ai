@@ -27,6 +27,9 @@ async function ConsentForm() {
         </span>
       </label>
       <Button type="submit" size="lg">Concordar e continuar</Button>
+      {isEnabled("researchConsent") && (
+        <p className="text-sm text-muted">A pesquisa anônima é opcional e fica em Perfil, desligada por padrão.</p>
+      )}
     </form>
   );
 }
@@ -52,9 +55,6 @@ export default function ConsentPage() {
       <Suspense fallback={<PageSkeleton />}>
         <ConsentForm />
       </Suspense>
-      {isEnabled("researchConsent") && (
-        <p className="text-sm text-muted">A pesquisa anônima é opcional e fica em Perfil, desligada por padrão.</p>
-      )}
     </div>
   );
 }
