@@ -38,7 +38,7 @@ async function Admin() {
         <ul className="divide-y divide-[#F1E7DE] rounded-[24px] bg-surface-raised px-4">
           {testers.map((t) => {
             const access = ACCESS_LABEL[t.access];
-            const canToggle = t.access !== "paid" && t.id !== user.id;
+            const canToggle = t.access !== "paid";
             const on = t.access === "beta";
             return (
               <li key={t.id} className="space-y-2 py-3">

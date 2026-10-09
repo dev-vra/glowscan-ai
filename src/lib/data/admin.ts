@@ -1,11 +1,14 @@
 import "server-only";
 import { randomBytes } from "node:crypto";
-import { BETA_CUSTOMER_PREFIX, isBetaCustomer } from "@/lib/billing";
+import { BETA_CUSTOMER_PREFIX } from "@/lib/billing";
+import type { SubscriptionStatus } from "@/generated/prisma/enums";
 import { db } from "@/lib/db";
 import { env } from "@/lib/env";
 import { createAuthUser, setAuthPassword } from "@/lib/supabase";
 
 const PASSWORD_BYTES = 9; // 12 caracteres base64url
+const BETA_PLAN = "beta";
+const PAID: SubscriptionStatus[] = ["active", "trialing"];
 
 export function isAdmin(email: string) {
   return env().ADMIN_EMAILS.split(",").map((e) => e.trim().toLowerCase()).filter(Boolean).includes(email.toLowerCase());
@@ -29,21 +32,22 @@ export async function listTesters() {
     scans: u._count.scans,
     products: u._count.products,
     access: !u.subscription ? "none"
-      : isBetaCustomer(u.subscription.stripeCustomerId) ? (u.subscription.status === "active" ? "beta" : "beta_off")
-      : (u.subscription.status === "active" || u.subscription.status === "trialing" ? "paid" : "none"),
+      : u.subscription.plan === BETA_PLAN ? (u.subscription.status === "active" ? "beta" : "beta_off")
+      : PAID.includes(u.subscription.status) ? "paid" : "none",
   }));
 }
 
 export type Tester = Awaited<ReturnType<typeof listTesters>>[number];
 
-// Liga/desliga acesso grátis. Nunca mexe em assinatura paga de verdade.
+// Liga/desliga acesso grátis (plano "beta"). Nunca mexe em assinatura paga ativa;
+// ex-cliente Stripe mantém o customer, então pode assinar de verdade depois.
 export async function setBetaAccess(userId: string, on: boolean) {
   const sub = await db().subscription.findUnique({ where: { userId } });
-  if (sub && !isBetaCustomer(sub.stripeCustomerId)) throw new Error("PAID_SUBSCRIPTION");
+  if (sub && sub.plan !== BETA_PLAN && PAID.includes(sub.status)) throw new Error("PAID_SUBSCRIPTION");
   await db().subscription.upsert({
     where: { userId },
-    create: { userId, stripeCustomerId: `${BETA_CUSTOMER_PREFIX}${userId}`, status: on ? "active" : "canceled", plan: "beta" },
-    update: { status: on ? "active" : "canceled" },
+    create: { userId, stripeCustomerId: `${BETA_CUSTOMER_PREFIX}${userId}`, status: on ? "active" : "canceled", plan: BETA_PLAN },
+    update: { status: on ? "active" : "canceled", plan: BETA_PLAN },
   });
 }
 

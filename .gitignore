@@ -44,3 +44,6 @@ src/generated
 !.env.example
 replica/design-handoff/*.zip
 .remember/
+
+.vercel
+.env*
