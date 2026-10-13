@@ -1,5 +1,6 @@
 import "server-only";
 import { db } from "@/lib/db";
+import { getSkinProfile } from "./profile";
 import type { Period } from "@/generated/prisma/enums";
 
 const DEFAULT_TZ = "America/Sao_Paulo";
@@ -16,7 +17,7 @@ export function localToday(timezone = DEFAULT_TZ, now = new Date()) {
 }
 
 export async function getTodayChecklist(userId: string) {
-  const profile = await db().skinProfile.findUnique({ where: { userId } });
+  const profile = await getSkinProfile(userId);
   const { date, weekday } = localToday(profile?.timezone);
   const [routines, logs, checkIn] = await Promise.all([
     db().routine.findMany({
@@ -40,7 +41,7 @@ export async function getTodayChecklist(userId: string) {
 export async function toggleRoutineStep(userId: string, period: Exclude<Period, "both">, stepId: string, done: boolean) {
   const owned = await db().routineStep.findFirst({ where: { id: stepId, routine: { userId, period } } });
   if (!owned) throw new Error("NOT_FOUND");
-  const profile = await db().skinProfile.findUnique({ where: { userId } });
+  const profile = await getSkinProfile(userId);
   const { date } = localToday(profile?.timezone);
   await db().$transaction(async (tx) => {
     const log = await tx.routineLog.upsert({
@@ -56,7 +57,7 @@ export async function toggleRoutineStep(userId: string, period: Exclude<Period, 
 }
 
 export async function saveCheckIn(userId: string, feeling: number, reactions: string[], notes: string | null) {
-  const profile = await db().skinProfile.findUnique({ where: { userId } });
+  const profile = await getSkinProfile(userId);
   const { date } = localToday(profile?.timezone);
   await db().checkIn.upsert({
     where: { userId_date: { userId, date } },
@@ -78,7 +79,7 @@ const STREAK_LOOKBACK_DAYS = 120;
 
 // Dias seguidos com pelo menos um passo feito, contando de hoje (ou de ontem, se hoje ainda está vazio).
 export async function getStreak(userId: string) {
-  const profile = await db().skinProfile.findUnique({ where: { userId } });
+  const profile = await getSkinProfile(userId);
   const { date: today } = localToday(profile?.timezone);
   const logs = await db().routineLog.findMany({
     where: { userId, date: { gte: new Date(today.getTime() - STREAK_LOOKBACK_DAYS * DAY_MS) } },

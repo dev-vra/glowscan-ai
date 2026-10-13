@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
     serverActions: { bodySizeLimit: "4mb" },
   },
   cacheComponents: true,
+  // nginx segura a resposta inteira por padrão; sem isto o esqueleto da página só chega junto com os dados.
+  headers: async () => [{ source: "/:path*{/}?", headers: [{ key: "X-Accel-Buffering", value: "no" }] }],
   partialPrefetching: true,
   turbopack: {
     rules: {

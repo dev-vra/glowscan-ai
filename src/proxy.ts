@@ -18,7 +18,8 @@ export async function proxy(request: NextRequest) {
       },
     },
   });
-  await supabase.auth.getUser();
+  // getClaims renova o token vencido e valida o JWT localmente; não vai ao servidor de auth a cada request.
+  await supabase.auth.getClaims();
   return response;
 }
 

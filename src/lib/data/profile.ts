@@ -1,5 +1,6 @@
 import "server-only";
 import { db } from "@/lib/db";
+import { loadAccount } from "./account";
 import type { SkinType } from "@/generated/prisma/enums";
 
 export type ProfileInput = {
@@ -11,7 +12,7 @@ export type ProfileInput = {
 };
 
 export async function getSkinProfile(userId: string) {
-  return db().skinProfile.findUnique({ where: { userId } });
+  return (await loadAccount(userId))?.profile ?? null;
 }
 
 export async function saveSkinProfile(userId: string, input: ProfileInput) {

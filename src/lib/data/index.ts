@@ -1,10 +1,12 @@
 import "server-only";
+import { cache } from "react";
 import { analyzeFaceImage, FACE_PROMPT_VERSION } from "@/lib/ai/analyze-face";
 import { db } from "@/lib/db";
 import { env } from "@/lib/env";
 import { deleteAuthUser, deleteUserPhotos, signedPhotoUrl, supabaseAuth, uploadPhoto } from "@/lib/supabase";
 import type { FaceScan as FaceScanRow, ScanMetric as ScanMetricRow } from "@/generated/prisma/client";
 import type { ConsentKind } from "@/generated/prisma/enums";
+import { loadAccount } from "./account";
 import type { FaceScan, MetricResult, SkinMetric, User } from "./types";
 
 const MAX_IMAGE_BYTES = 3_500_000;
@@ -12,14 +14,17 @@ const DAILY_SCAN_LIMIT = 10;
 const DAY_MS = 86_400_000;
 const ACTIVE_SUBSCRIPTION: readonly string[] = ["trialing", "active"];
 
-export async function getCurrentUser(): Promise<User | null> {
+// getClaims valida o JWT localmente (chave assimétrica), sem ir ao servidor de auth a cada request.
+export const getCurrentUser = cache(async (): Promise<User | null> => {
   const supabase = await supabaseAuth();
-  const { data } = await supabase.auth.getUser();
-  if (!data.user?.email) return null;
-  const { id, email } = data.user;
-  await db().user.upsert({ where: { id }, create: { id, email }, update: {} });
+  const { data } = await supabase.auth.getClaims();
+  const id = data?.claims.sub;
+  const email = data?.claims.email;
+  if (!id || typeof email !== "string" || !email) return null;
+  // Primeiro acesso: cria a linha do usuário. Nos demais, a leitura já serve aos guards.
+  if (!(await loadAccount(id))) await db().user.upsert({ where: { id }, create: { id, email }, update: {} });
   return { id, email };
-}
+});
 
 export async function requireUser(): Promise<User> {
   const user = await getCurrentUser();
@@ -70,15 +75,15 @@ export async function revokeConsent(userId: string, kind: ConsentKind) {
   await db().consent.updateMany({ where: { userId, kind, revokedAt: null }, data: { revokedAt: new Date() } });
 }
 
-export const hasFacialConsent = (userId: string) => hasConsent(userId, "facial_photo");
+export const hasFacialConsent = async (userId: string) => ((await loadAccount(userId))?.consents.length ?? 0) > 0;
 export const grantFacialConsent = (userId: string) => grantConsent(userId, "facial_photo");
 export const revokeFacialConsent = (userId: string) => revokeConsent(userId, "facial_photo");
 
 export async function hasActiveSubscription(userId: string) {
   // Atalho só para desenvolvimento local sem Stripe; ignorado em produção.
   if (env().BILLING_BYPASS && process.env.NODE_ENV !== "production") return true;
-  const sub = await db().subscription.findUnique({ where: { userId } });
-  return sub !== null && ACTIVE_SUBSCRIPTION.includes(sub.status);
+  const sub = (await loadAccount(userId))?.subscription;
+  return sub != null && ACTIVE_SUBSCRIPTION.includes(sub.status);
 }
 
 export function decodeJpegDataUrl(dataUrl: string) {
