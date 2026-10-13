@@ -44,7 +44,7 @@
 .face-guide[data-state="ok"] { animation: vico-breathe 1.6s var(--ease-in-out) infinite; border-style: solid; border-color: #8FD6A8; }
 .face-guide[data-state="adjust"] { border-style: dashed; border-color: var(--color-gold); transition: border-color var(--dur-2); }
 .face-guide[data-state="out"] { border-style: dashed; border-color: #FFFFFF; }
-/* Captura automática: 3s estável com estado ok → contorno faz stroke-dashoffset 100%→0 em 3s linear, depois flash branco 120ms + haptic (navigator.vibrate(12)). */
+/* Captura (toque no botão): flash branco + haptic (navigator.vibrate(12)). */
 @keyframes vico-flash { from { opacity: .7; } to { opacity: 0; } }
 .capture-flash { position: fixed; inset: 0; background: #FFFFFF; animation: vico-flash 240ms ease-out forwards; pointer-events: none; }
 

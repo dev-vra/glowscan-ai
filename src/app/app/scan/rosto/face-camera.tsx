@@ -17,7 +17,6 @@ const SAMPLE_MS = 400;
 const MIN_LUMINANCE = 70;
 const MAX_LUMINANCE = 215;
 const SAMPLE_WIDTH = 32;
-const STABLE_MS = 3000;
 const READING_STEP_MS = 2500;
 const FLASH_MS = 240;
 const HAPTIC_MS = 12;
@@ -68,7 +67,6 @@ export function FaceCamera() {
   const [light, setLight] = useState<Light>("ok");
   const [luminance, setLuminance] = useState(MIN_LUMINANCE);
   const [frame, setFrame] = useState<Frame>("ok");
-  const [countingDown, setCountingDown] = useState(false);
   const [flash, setFlash] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -132,21 +130,6 @@ export function FaceCamera() {
     submit(toJpegDataUrl(bitmap, bitmap.width, bitmap.height, false));
   };
 
-  // Captura automática: 3s estável com todas as checagens ok.
-  const captureRef = useRef(capture);
-  useEffect(() => {
-    captureRef.current = capture;
-  });
-  useEffect(() => {
-    const ready = canCapture && !pending;
-    const toggle = window.setTimeout(() => setCountingDown(ready), 0);
-    const shoot = ready ? window.setTimeout(() => captureRef.current(), STABLE_MS) : undefined;
-    return () => {
-      window.clearTimeout(toggle);
-      window.clearTimeout(shoot);
-    };
-  }, [canCapture, pending]);
-
   if (pending) return <ReadingScreen />;
 
   const blocked = status === "denied" || status === "unavailable";
@@ -194,11 +177,6 @@ export function FaceCamera() {
             <div className="relative h-[360px] w-[270px] max-w-[72vw]">
               <div className="absolute inset-0 rounded-[50%] shadow-[0_0_0_9999px_rgba(26,19,16,.6)]" />
               <div data-state={guardState} className="face-guide absolute inset-0 rounded-[50%] border-4" />
-              {countingDown && (
-                <svg viewBox="0 0 270 360" className="absolute inset-0 size-full">
-                  <ellipse cx="135" cy="180" rx="133" ry="178" fill="none" stroke="#FFFFFF" strokeWidth="4" pathLength={100} className="countdown-ring" />
-                </svg>
-              )}
             </div>
           </div>
         )}

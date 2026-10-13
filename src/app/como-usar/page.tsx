@@ -52,7 +52,7 @@ const STEPS: Step[] = [
     title: "Faça a primeira análise",
     body: (
       <>
-        <p>Toque no botão <strong>+</strong> no centro da barra de baixo. Encaixe o rosto no oval e espere os três sinais ficarem verdes: <strong>luz boa</strong>, <strong>rosto no oval</strong> e <strong>sem filtro</strong>. Com tudo certo, a foto é tirada sozinha depois de 3 segundos.</p>
+        <p>Toque no botão <strong>+</strong> no centro da barra de baixo. Encaixe o rosto no oval e espere os três sinais ficarem verdes: <strong>luz boa</strong>, <strong>rosto no oval</strong> e <strong>sem filtro</strong>. Com tudo certo, toque em <strong>Analisar agora</strong> para tirar a foto.</p>
         <ul className="list-disc space-y-1 pl-5">
           <li>Fique de frente para uma janela, sem sol direto.</li>
           <li>Cabelo preso, rosto inteiro no oval, sem base e sem filtro.</li>

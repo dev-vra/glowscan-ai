@@ -3,7 +3,7 @@
 
 export const SCAN_COPY = {
   starting: "Abrindo a câmera…",
-  ready: "Tudo certo. Fica parada 3 segundos.",
+  ready: "Tudo certo. Toque em Analisar agora.",
   lowLight: { title: "Tá escuro aqui.", body: "Vira de frente pra uma janela — luz natural lê melhor a pele." },
   highLight: { title: "Luz forte demais.", body: "Sai do sol direto e desliga o flash." },
   makeup: { title: "Parece ter base ou filtro.", body: "Sem eles, a leitura fica fiel à sua pele.", override: "Tô sem maquiagem, analisar" },
