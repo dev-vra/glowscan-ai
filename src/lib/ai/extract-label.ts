@@ -1,7 +1,7 @@
 import "server-only";
 import { generateText, Output } from "ai";
 import { z } from "zod";
-import { env } from "@/lib/env";
+import { visionModel } from "@/lib/ai/model";
 
 const CATEGORIES = ["cleanser", "toner", "essence", "serum", "treatment", "eye", "moisturizer", "oil", "spf", "mask", "exfoliant", "other"] as const;
 
@@ -21,7 +21,7 @@ Não invente ingredientes: se a lista não estiver visível, retorne inci vazio 
 
 export async function extractLabel(image: Buffer): Promise<LabelExtraction> {
   const { output } = await generateText({
-    model: env().AI_VISION_MODEL,
+    model: visionModel(),
     system: SYSTEM,
     output: Output.object({ schema: labelSchema }),
     messages: [

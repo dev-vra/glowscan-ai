@@ -1,7 +1,7 @@
 import "server-only";
 import { generateText, Output } from "ai";
 import { z } from "zod";
-import { env } from "@/lib/env";
+import { visionModel } from "@/lib/ai/model";
 import { FACE_ZONES } from "@/lib/data/types";
 
 // Prompt versionado: mudar o texto exige subir a versão (métricas só são comparáveis na mesma versão).
@@ -37,7 +37,7 @@ Seja consistente: mesma pele em condições similares deve ter notas similares. 
 
 export async function analyzeFaceImage(image: Buffer): Promise<FaceAnalysis> {
   const { output } = await generateText({
-    model: env().AI_VISION_MODEL,
+    model: visionModel(),
     system: SYSTEM,
     output: Output.object({ schema: faceAnalysisSchema }),
     messages: [

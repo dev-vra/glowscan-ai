@@ -8,6 +8,7 @@ const schema = z.object({
   DATABASE_URL: z.string().min(1),
   NEXT_PUBLIC_SITE_URL: z.url(),
   AI_VISION_MODEL: z.string().default("anthropic/claude-sonnet-5.5"),
+  GOOGLE_GENERATIVE_AI_API_KEY: z.string().optional(), // chave direta do Gemini (AI Studio); usada quando AI_VISION_MODEL começa com "google/"
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   STRIPE_PRICE_MONTHLY: z.string().optional(),
