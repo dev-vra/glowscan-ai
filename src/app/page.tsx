@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Camera, Check, Download, ListOrdered, ScanFace, Share2, Smartphone, Sun, TrendingUp, Zap } from "lucide-react";
 import { APK_URL, SiteShell } from "@/components/site/site-shell";
@@ -7,6 +8,10 @@ import { Eyebrow } from "@/components/ui/card";
 import { MetricBar } from "@/components/ui/metric-bar";
 import { ScoreRing } from "@/components/ui/score-ring";
 import { BILLING_COPY } from "@/lib/copy";
+import shelfPhoto from "@/assets/site/armario.jpg";
+import ctaPhoto from "@/assets/site/cta.jpg";
+import heroPhoto from "@/assets/site/hero.jpg";
+import problemPhoto from "@/assets/site/problema.jpg";
 
 const PROBLEMS = [
   { title: "App de selfie não sabe o que você passa no rosto.", text: "Dá uma nota e para por aí." },
@@ -77,6 +82,15 @@ export default function LandingPage() {
           <AppDownload />
           <p className="text-sm text-muted">{BILLING_COPY.trialSub} App para iPhone em breve na App Store.</p>
         </div>
+        <div className="space-y-4">
+        <Image
+          src={heroPhoto}
+          alt="Homem com toalha no ombro tirando uma selfie perto da janela do banheiro"
+          preload
+          placeholder="blur"
+          sizes="(min-width: 1024px) 560px, 100vw"
+          className="w-full rounded-[28px]"
+        />
         <figure className="space-y-4 rounded-[28px] bg-surface-raised p-6" aria-label="Exemplo de resultado">
           <div className="flex items-center gap-5">
             <ScoreRing score={72} size="md" />
@@ -90,11 +104,20 @@ export default function LandingPage() {
             {EXAMPLE_METRICS.map((m, i) => <MetricBar key={m.label} index={i} {...m} />)}
           </div>
         </figure>
+        <p className="text-xs text-muted">Fotos e números desta página são ilustrativos.</p>
+        </div>
       </section>
 
       <section aria-labelledby="problema" className="space-y-5 py-12">
         <Eyebrow id="problema">O problema</Eyebrow>
         <h2 className="font-display text-[30px] leading-9">Você compra, passa, e não sabe se está adiantando.</h2>
+        <Image
+          src={problemPhoto}
+          alt="Mão escolhendo um frasco em uma prateleira de banheiro cheia de produtos de skincare"
+          placeholder="blur"
+          sizes="(min-width: 1024px) 1100px, 100vw"
+          className="aspect-[2/1] w-full rounded-[24px] object-cover lg:aspect-[3/1]"
+        />
         <ul className="grid gap-3 lg:grid-cols-3">
           {PROBLEMS.map((p) => (
             <li key={p.title} className="space-y-1 rounded-[24px] bg-surface p-5">
@@ -169,6 +192,24 @@ export default function LandingPage() {
         </ul>
       </section>
 
+      <section aria-labelledby="armario" className="grid items-center gap-6 py-12 lg:grid-cols-2 lg:gap-10">
+        <Image
+          src={shelfPhoto}
+          alt="Protetor solar, água micelar, hidratante e sabonete sem marca sobre um tecido de linho"
+          placeholder="blur"
+          sizes="(min-width: 1024px) 540px, 100vw"
+          className="w-full rounded-[24px]"
+        />
+        <div className="space-y-3">
+          <Eyebrow id="armario">Neutro de verdade</Eyebrow>
+          <h2 className="font-display text-[30px] leading-9">Funciona com o que você já tem no armário.</h2>
+          <p className="text-muted">
+            De farmácia ou importado: o Viço lê a lista de ingredientes de qualquer marca. A gente não vende produto,
+            então não tem motivo pra empurrar nenhum.
+          </p>
+        </div>
+      </section>
+
       <section id="preco" aria-labelledby="preco-title" className="scroll-mt-24 space-y-5 py-12">
         <Eyebrow id="preco-title">Preço</Eyebrow>
         <h2 className="font-display text-[30px] leading-9">{BILLING_COPY.trialHeadline}</h2>
@@ -217,7 +258,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="space-y-5 rounded-[28px] bg-accent p-8 text-on-accent lg:p-12">
+      <section className="grid overflow-hidden rounded-[28px] bg-accent text-on-accent lg:grid-cols-[3fr_2fr]">
+        <div className="space-y-5 p-8 lg:p-12">
         <h2 className="font-display text-[34px] leading-10">Sua pele em 30 dias, em gráfico.</h2>
         <Link href="/entrar" className={buttonClasses("dark", "lg", "lg:w-auto")}>Começar 7 dias grátis</Link>
         <AppDownload tone="dark" />
@@ -225,6 +267,8 @@ export default function LandingPage() {
           No Android, permita &quot;instalar apps desconhecidos&quot; quando o celular pedir. No iPhone, abra o site no Safari e toque em
           Compartilhar → Adicionar à Tela de Início.
         </p>
+        </div>
+        <Image src={ctaPhoto} alt="" placeholder="blur" sizes="440px" className="hidden h-full object-cover lg:block" />
       </section>
 
     </main>
