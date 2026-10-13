@@ -85,7 +85,7 @@ export default function LandingPage() {
         <div className="space-y-4">
         <Image
           src={heroPhoto}
-          alt="Homem com toalha no ombro tirando uma selfie perto da janela do banheiro"
+          alt="Mulher de rosto limpo e cabelo cacheado olhando para a luz da janela"
           preload
           placeholder="blur"
           sizes="(min-width: 1024px) 560px, 100vw"
